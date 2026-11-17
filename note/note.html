@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Use case 09 · Dealer credit and receivables early warning</title>
+<style>
+  @page { size: A4; margin: 11mm 13mm 9mm; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 8.7pt/1.36 "Segoe UI", system-ui, -apple-system, "Helvetica Neue", sans-serif; color: #242424; }
+  header { display: flex; align-items: center; gap: 14px; border-bottom: 2px solid #d93835; padding-bottom: 8px; margin-bottom: 10px; }
+  header img { height: 26px; }
+  h1 { font-size: 15pt; margin: 0; font-weight: 600; }
+  .sub { color: #6e6e6e; font-size: 8.6pt; margin-top: 1px; }
+  h2 { font-size: 9.8pt; font-weight: 600; margin: 8px 0 3px; }
+  p { margin: 0 0 4px; }
+  table { border-collapse: collapse; width: 100%; }
+  td, th { text-align: left; vertical-align: top; padding: 2px 8px 2px 0; border-bottom: 1px solid #e6e6e6; }
+  th { font-size: 7.8pt; text-transform: uppercase; letter-spacing: .04em; color: #6e6e6e; font-weight: 600; }
+  td:first-child { white-space: nowrap; padding-right: 12px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; }
+  ul { margin: 0; padding-left: 14px; } li { margin-bottom: 2px; }
+  .muted { color: #6e6e6e; }
+</style>
+</head>
+<body>
+<header>
+  <img src="../assets/logo.png" alt="Arçelik">
+  <div><h1>Use case 09 · Dealer credit and receivables early warning</h1>
+  <div class="sub">Dashboard: Dealer_Receivables_Watch.html (offline) · claude.ai/artifact/B4PadJtNYHR8RX53cXUydG · dummy data, descriptive only</div></div>
+</header>
+
+<p>Goal: show the health of receivables per dealer, explain what moves it, and point to the dealers to call first. No forecasting, machine learning or optimisation.</p>
+
+<h2>What each page answers</h2>
+<table>
+  <tr><td>Overview</td><td>How healthy are receivables, and who needs a call first? Key messages, six headline measures, ranked action list, overdue trend, overdue by region and aging bucket.</td></tr>
+  <tr><td>Drivers</td><td>What is moving overdue? Change by region and dealer, concentration, DSO split into days on terms and days paid late, roll rates, aging as % of receivables.</td></tr>
+  <tr><td>Flags</td><td>Who trips the rules, and do the rules work? New, continuing and cleared flags per month, 6-month back-test, top 15 dealers by limit use.</td></tr>
+  <tr><td>Exposure</td><td>What could we lose? Collateral coverage, balance not covered per dealer, collateral by type, orders blocked, guarantees expiring within 90 days.</td></tr>
+  <tr><td>Dealers / Dealer detail</td><td>Sortable, searchable list of all dealers; click-through to one dealer's history, rules tripped, action, collateral and open invoices.</td></tr>
+  <tr><td>Appendix</td><td>Reading guide, glossary, scope, data and assumptions. First-time visitors get a 10-step guided tour; a ? icon explains each title and measure.</td></tr>
+</table>
+<p class="muted" style="margin-top:4px">Filters on every page: as-of month, region, brand, tier, payment terms.</p>
+
+<div class="two">
+<div>
+<h2>Main measures</h2>
+<table>
+  <tr><td>Overdue share</td><td>Overdue ÷ receivables at month-end; overdue = past due date (invoice date + terms)</td></tr>
+  <tr><td>DSO</td><td>Receivables ÷ last 3 months' sales × days</td></tr>
+  <tr><td>Days paid late</td><td>DSO minus days on terms (not-yet-due ÷ sales × days)</td></tr>
+  <tr><td>Roll rate</td><td>Share of last month's bucket still unpaid this month (3-month average)</td></tr>
+  <tr><td>Limit use</td><td>Receivables ÷ credit limit in force</td></tr>
+  <tr><td>Not covered</td><td>Receivables above collateral in force</td></tr>
+</table>
+</div>
+<div>
+<h2>Flags and thresholds</h2>
+<table>
+  <tr><td>Overdue rising</td><td>Up at each of the last 3 month-ends, by ≥ 5% each time, and ≥ ₺250k now</td></tr>
+  <tr><td>Limit over 90%</td><td>Limit use &gt; 90% (red above 100%)</td></tr>
+  <tr><td>90+ over 10%</td><td>More than 10% of balance over 90 days past due</td></tr>
+  <tr><td>Status</td><td>Act = 2 or more flags · Watch = 1</td></tr>
+  <tr><td>Back-test</td><td>Of dealers flagged 6 months earlier, share now 90+ over 10%</td></tr>
+</table>
+<p class="muted" style="margin-top:4px">Brief: the first two flags. The third flag is an extension.</p>
+</div>
+</div>
+
+<h2>Data (dummy) and columns</h2>
+<table>
+  <tr><th>Table</th><th>Columns</th><th>Rows</th></tr>
+  <tr><td>dealers</td><td>dealer_id, dealer_name, city, region, brand, tier, payment_terms_days</td><td>140</td></tr>
+  <tr><td>invoices</td><td>invoice_id, dealer_id, invoice_date, due_date, amount_try, product_group</td><td>24,141</td></tr>
+  <tr><td>payments</td><td>payment_id, invoice_id, dealer_id, payment_date, amount_try, method</td><td>25,877</td></tr>
+  <tr><td>credit_limits</td><td>dealer_id, effective_from, credit_limit_try, review_reason</td><td>700</td></tr>
+  <tr><td>collateral *</td><td>dealer_id, collateral_type, amount_try, valid_from, valid_to</td><td>804</td></tr>
+  <tr><td>actions *</td><td>dealer_id, owner, next_step, status, last_contact, promise_to_pay_date, promise_to_pay_try</td><td>35</td></tr>
+  <tr><td>dealer_month</td><td>Derived month-end snapshot: balances by bucket, sales, limit, collateral, orders blocked, roll rates, flags</td><td>3,360</td></tr>
+</table>
+<p class="muted" style="margin-top:4px">* Extensions beyond the brief. Full column descriptions: data/README.md.</p>
+
+<h2>Assumptions</h2>
+<ul>
+  <li>140 dealers across Turkey's 7 regions, Arçelik or Beko, tier A/B/C, payment terms 60, 90 or 120 days; Nov 2024 to Oct 2026, in TRY. Invoices start May 2024 so opening balances are realistic.</li>
+  <li>Sales grow about 2.2% a month (inflation), with peaks in summer and November. Each dealer follows one payment pattern: on time, slow, improving, deteriorating from some month in 2026, or distressed.</li>
+  <li>Limits are reviewed every January and July, and frozen for dealers in trouble. Credit control cuts orders above 95% of the limit and almost stops them above 105%.</li>
+  <li>Guarantee letters run 12 months and are not renewed for dealers in trouble. The collections log reflects Oct 2026 only.</li>
+  <li>The back-test is flattered by dummy data; real hit rates will be lower. Rebuild everything with ./build.sh (fixed random seed).</li>
+</ul>
+</body>
+</html>

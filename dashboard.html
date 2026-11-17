@@ -1,0 +1,1193 @@
+<title>Dealer Receivables Watch</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: Fluent-style flat sheet. Brand strip, header with logo, sticky filter bar, then each page:
+   question title > how-to-read line > summary > detail. One typeface, two weights (400 / 600). Sharp corners. */
+:root {
+  --bg: #f5f5f5; --surface: #ffffff; --ink: #242424; --ink-2: #4f4f4f; --muted: #6e6e6e;
+  --line: #e6e6e6; --line-2: #d1d1d1; --field: #ffffff; --field-line: #616161;
+  --brand: #d93835; --link: #242424; --shadow: 0 0 2px rgba(0,0,0,.10), 0 1px 3px rgba(0,0,0,.10); --card-line: transparent;
+  --s1: #3b3b3b; --s1-wash: rgba(59,59,59,.06); --ref: #6e6e6e; --bar: #a3a3a3; --secured: #b8b8b8;
+  --b0: #ee8f99; --b1: #dc3a4b; --b2: #b8001a; --b3: #6e0010; --notdue: #d6d6d6;
+  --crit: #c50f1f; --crit-ink: #b10e1c; --crit-wash: #fde7e9;
+  --warn: #f7a600; --warn-ink: #835b00; --warn-wash: #fff4ce;
+  --good: #107c10; --good-ink: #0e700e;
+  --sans: "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", sans-serif;
+  --fs-xs: 12px; --fs-s: 13px; --fs-b: 15px; --fs-m: 17px; --fs-l: 19px; --fs-xl: 32px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #141414; --surface: #1f1f1f; --ink: #f2f2f2; --ink-2: #c8c8c8; --muted: #9a9a9a;
+  --line: #333333; --line-2: #4a4a4a; --field: #2b2b2b; --field-line: #9a9a9a;
+  --brand: #ef5350; --link: #f2f2f2; --shadow: none; --card-line: #333333;
+  --s1: #d6d6d6; --s1-wash: rgba(214,214,214,.08); --ref: #9a9a9a; --bar: #6b6b6b; --secured: #5c5c5c;
+  --b0: #9a1a28; --b1: #c8283a; --b2: #ec4a5a; --b3: #f7a9b1; --notdue: #474747;
+  --crit: #ec4a5a; --crit-ink: #ff8a95; --crit-wash: #3d1a1e;
+  --warn: #f7a600; --warn-ink: #ffc44d; --warn-wash: #3a2e12;
+  --good: #54b054; --good-ink: #6cc46c; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #141414; --surface: #1f1f1f; --ink: #f2f2f2; --ink-2: #c8c8c8; --muted: #9a9a9a;
+  --line: #333333; --line-2: #4a4a4a; --field: #2b2b2b; --field-line: #9a9a9a;
+  --brand: #ef5350; --link: #f2f2f2; --shadow: none; --card-line: #333333;
+  --s1: #d6d6d6; --s1-wash: rgba(214,214,214,.08); --ref: #9a9a9a; --bar: #6b6b6b; --secured: #5c5c5c;
+  --b0: #9a1a28; --b1: #c8283a; --b2: #ec4a5a; --b3: #f7a9b1; --notdue: #474747;
+  --crit: #ec4a5a; --crit-ink: #ff8a95; --crit-wash: #3d1a1e;
+  --warn: #f7a600; --warn-ink: #ffc44d; --warn-wash: #3a2e12;
+  --good: #54b054; --good-ink: #6cc46c; color-scheme: dark; }
+
+* { box-sizing: border-box; border-radius: 0; }
+body { background: var(--bg); color: var(--ink); font: 400 var(--fs-b)/1.55 var(--sans); }
+body::before { content: ""; display: block; height: 4px; background: var(--brand); }
+b, strong { font-weight: inherit; }
+em, i { font-style: normal; }
+h1, h2, h3, p { margin: 0; }
+h1, h2, h3 { font-weight: 600; text-wrap: balance; }
+button, select, input { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.num, td, .kpi .v, svg text { font-variant-numeric: tabular-nums; }
+.wrap { max-width: 1280px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+/* header */
+header { padding-block: 24px 0; }
+.head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 32px; }
+.brandrow { display: flex; align-items: center; gap: 20px; min-width: 0; }
+.logo { height: 36px; width: auto; display: block; }
+.logo.dk { display: none; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .logo.lt { display: none; } :root:not([data-theme="light"]) .logo.dk { display: block; } }
+:root[data-theme="dark"] .logo.lt { display: none; }
+:root[data-theme="dark"] .logo.dk { display: block; }
+.wordmark { font-size: 24px; font-weight: 600; color: var(--brand); }
+.titles { display: grid; gap: 2px; border-left: 1px solid var(--line-2); padding-left: 20px; min-width: 0; }
+h1 { font-size: 26px; letter-spacing: -.01em; line-height: 1.2; }
+.eyebrow { font-size: var(--fs-s); color: var(--muted); }
+.head-r { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.tag { font-size: var(--fs-s); color: var(--ink-2); border: 1px solid var(--line-2); background: var(--surface); padding: 4px 10px; white-space: nowrap; }
+nav.tabs { display: flex; gap: 4px; margin-top: 24px; overflow-x: auto; }
+nav.tabs button { background: none; border: 0; padding: 12px 14px; color: var(--ink-2); cursor: pointer; border-bottom: 3px solid transparent; white-space: nowrap; font-size: var(--fs-b); }
+nav.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--brand); font-weight: 600; }
+nav.tabs button:hover { color: var(--ink); background: var(--surface); }
+
+/* filters */
+.filters { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.filters .wrap { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: end; padding-block: 14px; }
+.f { display: grid; gap: 4px; min-width: 0; }
+.f label { font-size: var(--fs-xs); color: var(--muted); }
+.f select, .search { background: var(--field); border: 1px solid var(--line-2); border-bottom-color: var(--field-line); padding: 7px 32px 7px 10px; min-width: 0; font-size: var(--fs-b); }
+.f select { appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%); background-position: calc(100% - 16px) 55%, calc(100% - 11px) 55%; background-size: 5px 5px; background-repeat: no-repeat; cursor: pointer; }
+.linkbtn { background: none; border: 0; color: var(--link); cursor: pointer; padding: 7px 0; text-decoration: underline; text-underline-offset: 3px; font-size: var(--fs-b); }
+.seg { display: inline-flex; flex-wrap: wrap; }
+.seg button { background: var(--field); border: 1px solid var(--line-2); padding: 6px 14px; font-size: var(--fs-s); cursor: pointer; color: var(--ink-2); }
+.seg button + button { margin-left: -1px; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--surface); border-color: var(--ink); position: relative; }
+
+/* page scaffolding */
+main { padding-block: 36px 72px; }
+.page { display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px; }
+.page > * { min-width: 0; }
+@media (max-width: 600px) { .brandrow { flex-wrap: wrap; gap: 12px; } .titles { border-left: 0; padding-left: 0; } h1 { font-size: 22px; } .tag { white-space: normal; } }
+.phead { display: grid; gap: 8px; max-width: 80ch; }
+.phead h2 { font-size: 24px; line-height: 1.3; }
+.inline-link { color: var(--link); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.firsttime { color: var(--ink-2); margin-top: -16px; }
+.firsttime .linkbtn { padding: 0; }
+.section-label { font-size: var(--fs-s); color: var(--muted); letter-spacing: .04em; text-transform: uppercase; margin-bottom: -16px; }
+
+.card { background: var(--surface); border: 1px solid var(--card-line); box-shadow: var(--shadow); padding: 24px 28px 28px; min-width: 0; display: grid; gap: 6px; align-content: start; }
+.card h3 { font-size: var(--fs-l); line-height: 1.35; }
+.card .sub { font-size: var(--fs-s); color: var(--muted); }
+.card .body { margin-top: 18px; min-width: 0; }
+.grid2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; }
+@media (max-width: 900px) { .grid2 { grid-template-columns: minmax(0, 1fr); } .card { padding: 20px; } }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 20px; font-size: var(--fs-s); color: var(--ink-2); margin-top: 14px; }
+.legend i { display: inline-block; width: 12px; height: 12px; margin-right: 8px; vertical-align: -1px; }
+.legend i.ln { height: 2px; vertical-align: 4px; }
+.legend i.dash { height: 0; border-top: 2px dashed var(--ref); vertical-align: 4px; }
+
+/* key messages */
+.messages { list-style: none; margin: 14px 0 0; padding: 0; display: grid; }
+.messages li { font-size: var(--fs-m); line-height: 1.55; padding: 14px 0 14px 28px; border-top: 1px solid var(--line); position: relative; max-width: 95ch; }
+.messages li:first-child { border-top: 0; padding-top: 4px; }
+.messages li::before { content: ""; position: absolute; left: 4px; top: 25px; width: 8px; height: 8px; background: var(--brand); }
+.messages li:first-child::before { top: 15px; }
+
+/* KPI */
+.kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.kpis.k4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 1000px) { .kpis.k4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 760px) { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; } }
+@media (max-width: 460px) { .kpis, .kpis.k4 { grid-template-columns: minmax(0, 1fr); } }
+.kpi { background: var(--surface); border: 1px solid var(--card-line); box-shadow: var(--shadow); padding: 20px 24px; display: grid; gap: 6px; align-content: start; min-width: 0; }
+.kpi .k { font-size: var(--fs-b); color: var(--ink-2); }
+.kpi .v { font-size: var(--fs-xl); font-weight: 600; line-height: 1.15; letter-spacing: -.01em; }
+.kpi .v small { font-size: var(--fs-b); font-weight: 400; color: var(--muted); letter-spacing: 0; }
+.kpi .d { font-size: var(--fs-s); color: var(--muted); }
+.kpi svg { display: block; margin-top: 8px; max-width: 100%; }
+.up-bad { color: var(--crit-ink); } .up-good { color: var(--good-ink); }
+
+/* tables */
+.tbl-wrap { overflow-x: auto; min-width: 0; }
+.tbl-wrap.boxed { border: 1px solid var(--line); background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid var(--line); white-space: nowrap; vertical-align: middle; }
+th { font-size: var(--fs-xs); font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); background: var(--surface); position: sticky; top: 0; z-index: 1; }
+th.s { cursor: pointer; user-select: none; } th.s:hover { color: var(--ink); }
+th.s[data-dir]::after { content: " ↓"; } th.s[data-dir="1"]::after { content: " ↑"; }
+.r { text-align: right; }
+tbody tr.go { cursor: pointer; } tbody tr.go:hover td { background: var(--bg); }
+tbody tr:last-child td { border-bottom: 0; }
+td .meta { font-size: var(--fs-s); color: var(--muted); margin-top: 2px; }
+.zero { color: var(--line-2); }
+.count { font-size: var(--fs-s); color: var(--muted); }
+.toolbar { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: flex-end; justify-content: space-between; }
+.search { padding: 8px 12px; width: min(340px, 100%); }
+
+/* chips & pills */
+.chips { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; font-size: var(--fs-xs); padding: 2px 8px; border: 1px solid var(--line-2); color: var(--ink-2); white-space: nowrap; }
+.chip::before { content: ""; width: 7px; height: 7px; background: var(--warn); }
+.chip.c::before { background: var(--crit); }
+.pill { display: inline-block; font-size: var(--fs-xs); font-weight: 600; padding: 2px 8px; white-space: nowrap; letter-spacing: .02em; vertical-align: middle; }
+.pill.act { background: var(--crit-wash); color: var(--crit-ink); }
+.pill.watch { background: var(--warn-wash); color: var(--warn-ink); }
+.pill.ok { color: var(--muted); font-weight: 400; padding-left: 0; }
+.statuscell { display: grid; gap: 6px; justify-items: start; }
+.usebar { display: grid; grid-template-columns: 1fr 44px; gap: 8px; align-items: center; font-size: 14px; min-width: 120px; }
+.usebar .tr { height: 6px; background: var(--line); position: relative; overflow: hidden; }
+.usebar .fl { position: absolute; inset: 0 auto 0 0; background: var(--bar); }
+.usebar .fl.w { background: var(--warn); } .usebar .fl.c { background: var(--crit); }
+.usebar span { text-align: right; }
+
+/* charts */
+.chart { min-height: 60px; }
+svg { display: block; }
+svg text { fill: var(--muted); font: 12px var(--sans); }
+svg .lbl { fill: var(--ink-2); font-size: 13px; }
+svg .val { fill: var(--ink); font-size: 13px; }
+svg .grid { stroke: var(--line); stroke-width: 1; }
+svg .base { stroke: var(--line-2); stroke-width: 1; }
+svg .hit { fill: transparent; }
+svg .clk { cursor: pointer; }
+svg .guide { stroke: var(--line-2); stroke-width: 1; opacity: 0; }
+svg .hov:hover .guide, svg .hov:hover .dot { opacity: 1; }
+svg .dot { opacity: 0; }
+svg .col:hover .seg, svg .row:hover .seg { opacity: .8; }
+svg .row:hover .lbl { fill: var(--ink); }
+
+/* definition lists (guide, flags, dealer) */
+.def { display: grid; grid-template-columns: minmax(150px, 240px) minmax(0, 1fr); border-top: 1px solid var(--line); }
+.def > div { padding: 12px 0; border-bottom: 1px solid var(--line); min-width: 0; }
+.def > div:nth-child(odd) { padding-right: 24px; color: var(--ink); }
+.def > div:nth-child(even) { color: var(--ink-2); }
+@media (max-width: 600px) { .def { grid-template-columns: minmax(0, 1fr); } .def > div:nth-child(odd) { border-bottom: 0; padding-bottom: 0; } }
+code { font-family: inherit; background: var(--bg); padding: 1px 6px; border: 1px solid var(--line); font-size: 14px; }
+.steps { list-style: none; margin: 0; padding: 0; display: grid; counter-reset: s; }
+.steps li { counter-increment: s; display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; gap: 16px; align-items: baseline; padding: 16px 0; border-top: 1px solid var(--line); }
+.steps li:first-child { border-top: 0; }
+.steps li::before { content: counter(s); font-size: var(--fs-l); font-weight: 600; color: var(--brand); }
+.steps .t { font-size: var(--fs-m); }
+.steps .x { color: var(--ink-2); margin-top: 4px; }
+@media (max-width: 600px) { .steps li { grid-template-columns: 32px minmax(0, 1fr); } .steps li .linkbtn { grid-column: 2; justify-self: start; } }
+.flaglist { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.flaglist li { display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 10px; align-items: baseline; }
+.flaglist li::before { content: ""; width: 10px; height: 10px; background: var(--warn); }
+.flaglist li.c::before { background: var(--crit); }
+.flaglist li.ok { color: var(--muted); } .flaglist li.ok::before { background: var(--line-2); }
+.facts { display: flex; flex-wrap: wrap; gap: 6px 24px; color: var(--ink-2); }
+.dhead { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px 32px; align-items: flex-end; }
+.dhead h2 { font-size: 26px; }
+.note { font-size: var(--fs-s); color: var(--muted); }
+
+.help { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; margin-left: 8px; padding: 0; border: 1px solid var(--line-2); border-radius: 50%; background: transparent; color: var(--muted); font: 600 11px/1 var(--sans); letter-spacing: 0; text-transform: none; cursor: help; vertical-align: 2px; flex: none; }
+.help:hover, .help:focus-visible { color: var(--ink); border-color: var(--ink); }
+th .help { width: 16px; height: 16px; margin-left: 6px; font-size: 10px; vertical-align: 1px; }
+.tbtn { background: var(--ink); color: var(--surface); border: 1px solid var(--ink); padding: 7px 16px; font-size: var(--fs-s); cursor: pointer; }
+.tbtn:hover { opacity: .88; }
+.tbtn.ghost { background: transparent; color: var(--ink); border-color: var(--line-2); }
+#tour-block { position: fixed; inset: 0; z-index: 60; }
+#tour-spot { position: fixed; z-index: 61; pointer-events: none; box-shadow: 0 0 0 9999px rgba(0, 0, 0, .5); outline: 2px solid var(--brand); outline-offset: 0; transition: top .25s, left .25s, width .25s, height .25s; }
+#tour { position: fixed; z-index: 62; width: min(380px, calc(100vw - 32px)); background: var(--surface); color: var(--ink); border: 1px solid var(--line-2); box-shadow: 0 8px 24px rgba(0, 0, 0, .25); padding: 20px 22px 18px; display: grid; gap: 8px; }
+#tour[hidden], #tour-spot[hidden], #tour-block[hidden] { display: none; }
+.tour-count { font-size: var(--fs-xs); color: var(--muted); letter-spacing: .04em; text-transform: uppercase; }
+#tour h3 { font-size: var(--fs-l); }
+#tour p#tour-text { color: var(--ink-2); }
+.tour-nav { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+.tour-gap { flex: 1; }
+@media (prefers-reduced-motion: reduce) { #tour-spot { transition: none; } }
+#tip { position: fixed; z-index: 50; pointer-events: none; background: var(--ink); color: var(--surface); font-size: var(--fs-s); line-height: 1.5; padding: 8px 12px; white-space: pre-line; max-width: 300px; opacity: 0; transition: opacity .08s; font-variant-numeric: tabular-nums; }
+#tip.on { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { #tip { transition: none; } }
+</style>
+
+<header class="wrap">
+  <div class="head">
+    <div class="brandrow">
+      <img class="logo lt" src="assets/logo.png" alt="Arçelik" onerror="this.remove();document.getElementById('wordmark').hidden=false">
+      <img class="logo dk" src="assets/logo-dark.png" alt="Arçelik" onerror="this.remove()">
+      <span class="wordmark" id="wordmark" hidden>Arçelik</span>
+      <div class="titles">
+        <h1>Dealer Receivables Watch</h1>
+        <p class="eyebrow">Use case 09 · Dealer credit and receivables early warning</p>
+      </div>
+    </div>
+    <div class="head-r">
+      <span class="tag">Dummy data · 140 dealers · TRY · Nov 2024 to Oct 2026</span>
+      <div class="seg" role="group" aria-label="Theme">
+        <button type="button" id="theme-light" data-theme-set="light">Light</button>
+        <button type="button" id="theme-dark" data-theme-set="dark">Dark</button>
+      </div>
+    </div>
+  </div>
+  <nav class="tabs" role="tablist" aria-label="Pages">
+    <button role="tab" data-page="overview" id="tab-overview">Overview</button>
+    <button role="tab" data-page="drivers" id="tab-drivers">Drivers</button>
+    <button role="tab" data-page="flags" id="tab-flags">Flags</button>
+    <button role="tab" data-page="exposure" id="tab-exposure">Exposure</button>
+    <button role="tab" data-page="dealers" id="tab-dealers">Dealers</button>
+    <button role="tab" data-page="dealer" id="tab-dealer">Dealer detail</button>
+    <button role="tab" data-page="guide" id="tab-guide">Appendix</button>
+  </nav>
+</header>
+
+<div class="filters">
+  <div class="wrap">
+    <div class="f"><label for="f-month">As of month-end</label><select id="f-month"></select></div>
+    <div class="f"><label for="f-region">Region</label><select id="f-region"></select></div>
+    <div class="f"><label for="f-brand">Brand</label><select id="f-brand"></select></div>
+    <div class="f"><label for="f-tier">Dealer tier</label><select id="f-tier"></select></div>
+    <div class="f"><label for="f-terms">Payment terms</label><select id="f-terms"></select></div>
+    <button class="linkbtn" id="f-reset" type="button">Reset filters</button>
+  </div>
+</div>
+
+<main class="wrap" id="main"></main>
+<div id="tip" role="tooltip"></div>
+<div id="tour-block" hidden></div>
+<div id="tour-spot" hidden></div>
+<div id="tour" role="dialog" aria-labelledby="tour-title" aria-describedby="tour-text" hidden>
+  <p class="tour-count" id="tour-count"></p>
+  <h3 id="tour-title"></h3>
+  <p id="tour-text"></p>
+  <div class="tour-nav">
+    <button class="linkbtn" type="button" id="tour-skip">Skip tour</button>
+    <span class="tour-gap"></span>
+    <button class="tbtn ghost" type="button" id="tour-back">Back</button>
+    <button class="tbtn" type="button" id="tour-next">Next</button>
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script>
+(() => {
+const D = window.DATA, S = D.series, M = D.months.length;
+const BK = [
+  { f: "od_0_30", k: "b0", label: "0–30 days", col: "--b0" },
+  { f: "od_31_60", k: "b1", label: "31–60 days", col: "--b1" },
+  { f: "od_61_90", k: "b2", label: "61–90 days", col: "--b2" },
+  { f: "od_90p", k: "b3", label: "90+ days", col: "--b3" },
+];
+const BKK = BK.map(b => [b.k, b.label, b.col]);
+const TH = { use: 0.90, rise: 0.05, floor: 250000, aged: 0.10, expiry: 90, lookback: 6 };
+const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const mLabel = (t, long) => { const [y, m] = D.months[t].split("-"); return long ? `${MON[m - 1]} ${y}` : `${MON[m - 1]} ${y.slice(2)}`; };
+const epoch = Date.UTC(2024, 0, 1);
+const dayStr = d => { const x = new Date(epoch + d * 864e5); return `${x.getUTCDate()} ${MON[x.getUTCMonth()]} ${x.getUTCFullYear()}`; };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const fmtM = (v, dp) => {
+  const a = Math.abs(v), sg = v < 0 ? "−" : "";
+  if (a >= 1e9) return `${sg}₺${(a / 1e9).toFixed(dp ?? 2)}bn`;
+  if (a >= 1e6) return `${sg}₺${(a / 1e6).toFixed(dp ?? (a >= 1e8 ? 0 : 1))}M`;
+  if (a >= 1e3) return `${sg}₺${Math.round(a / 1e3)}k`;
+  return `${sg}₺${Math.round(a)}`;
+};
+const pct = (v, dp = 0) => `${(v * 100).toFixed(dp)}%`;
+const dirWord = (d, eps = 1e-9) => d > eps ? "up" : d < -eps ? "down" : "unchanged";
+
+// ---------- per-dealer measures ----------
+const g = (f, i, t) => S[f][i][t];
+const out = (i, t) => g("outstanding", i, t);
+const od = (i, t) => out(i, t) - g("not_due", i, t);
+const use = (i, t) => out(i, t) / g("credit_limit", i, t);
+const days3 = t => g("days_3m", 0, t);
+const dso = (i, t) => { const s = g("sales_3m", i, t); return s ? out(i, t) / s * days3(t) : 0; };
+const lateDays = (i, t) => { const s = g("sales_3m", i, t); return s ? od(i, t) / s * days3(t) : 0; };
+const unsec = (i, t) => Math.max(0, out(i, t) - g("collateral", i, t));
+const unsecOd = (i, t) => Math.max(0, od(i, t) - g("collateral", i, t));
+
+const FL = D.dealers.map((_, i) => Array.from({ length: M }, (_, t) => {
+  let rising = false;
+  if (t >= 3) {
+    const o = [3, 2, 1, 0].map(k => od(i, t - k));
+    rising = o[3] >= TH.floor && [0, 1, 2].every(j => o[j + 1] > o[j] && o[j + 1] >= o[j] * (1 + TH.rise));
+  }
+  const limit = use(i, t) > TH.use;
+  const aged = out(i, t) > 0 && g("od_90p", i, t) / out(i, t) > TH.aged;
+  const n = rising + limit + aged;
+  return { rising, limit, aged, n, any: n > 0, sev: n >= 2 ? 2 : n };
+}));
+
+// ---------- state & filters ----------
+const st = { t: M - 1, region: "", brand: "", tier: "", terms: "", page: "overview", dealer: null, q: "", chip: "all", sort: { k: "sev", dir: -1 }, cmp: 3 };
+const uniq = k => [...new Set(D.dealers.map(d => d[k]))];
+const REGIONS = uniq("region");
+const fill = (id, opts, all) => {
+  document.getElementById(id).innerHTML = (all ? `<option value="">${all}</option>` : "") + opts.map(([v, l]) => `<option value="${esc(v)}">${esc(l)}</option>`).join("");
+};
+fill("f-month", D.months.map((_, t) => [t, mLabel(t, true)]).reverse());
+fill("f-region", REGIONS.map(r => [r, r]), "All regions");
+fill("f-brand", uniq("brand").sort().map(r => [r, r]), "All brands");
+fill("f-tier", [["A", "A · large"], ["B", "B · medium"], ["C", "C · small"]], "All tiers");
+fill("f-terms", [60, 90, 120].map(v => [v, `${v} days`]), "All terms");
+const SEL = { month: "t", region: "region", brand: "brand", tier: "tier", terms: "terms" };
+const syncFilters = () => { for (const [id, key] of Object.entries(SEL)) document.getElementById("f-" + id).value = st[key]; };
+for (const [id, key] of Object.entries(SEL)) {
+  const el = document.getElementById("f-" + id);
+  el.addEventListener("change", () => { st[key] = key === "t" ? +el.value : el.value; render(); });
+}
+syncFilters();
+document.getElementById("f-reset").onclick = () => { Object.assign(st, { t: M - 1, region: "", brand: "", tier: "", terms: "" }); syncFilters(); render(); };
+const ids = () => D.dealers.map((_, i) => i).filter(i => {
+  const d = D.dealers[i];
+  return (!st.region || d.region === st.region) && (!st.brand || d.brand === st.brand) &&
+    (!st.tier || d.tier === st.tier) && (!st.terms || d.payment_terms_days === +st.terms);
+});
+const scope = () => [st.region, st.brand, st.tier && `tier ${st.tier}`, st.terms && `${st.terms}-day terms`].filter(Boolean).join(", ") || "all dealers";
+
+function agg(I, t) {
+  const a = { n: I.length, out: 0, nd: 0, s3: 0, lim: 0, tw: 0, coll: 0, sec: 0, unsec: 0, unsecOd: 0, blocked: 0, b0: 0, b1: 0, b2: 0, b3: 0, r0: 0, r1: 0, r2: 0, p0: 0, p1: 0, p2: 0 };
+  for (const i of I) {
+    const o = out(i, t), c = g("collateral", i, t);
+    a.out += o; a.nd += g("not_due", i, t); a.s3 += g("sales_3m", i, t); a.lim += g("credit_limit", i, t);
+    a.tw += D.dealers[i].payment_terms_days * g("sales_3m", i, t);
+    a.coll += c; a.sec += Math.min(o, c); a.unsec += Math.max(0, o - c); a.unsecOd += unsecOd(i, t);
+    a.blocked += g("orders_blocked", i, t);
+    for (const b of BK) a[b.k] += g(b.f, i, t);
+    a.r0 += g("roll_0_30", i, t); a.r1 += g("roll_31_60", i, t); a.r2 += g("roll_61_90", i, t);
+    if (t > 0) { a.p0 += g("od_0_30", i, t - 1); a.p1 += g("od_31_60", i, t - 1); a.p2 += g("od_61_90", i, t - 1); }
+  }
+  const d = days3(t);
+  a.od = a.out - a.nd; a.odPct = a.out ? a.od / a.out : 0;
+  a.dso = a.s3 ? a.out / a.s3 * d : 0; a.bp = a.s3 ? a.nd / a.s3 * d : 0; a.late = a.dso - a.bp;
+  a.use = a.lim ? a.out / a.lim : 0; a.terms = a.s3 ? a.tw / a.s3 : 0; a.b3Pct = a.out ? a.b3 / a.out : 0;
+  a.roll = [a.p0 ? a.r0 / a.p0 : null, a.p1 ? a.r1 / a.p1 : null, a.p2 ? a.r2 / a.p2 : null];
+  a.flagged = I.filter(i => FL[i][t].any).length; a.act = I.filter(i => FL[i][t].sev === 2).length;
+  return a;
+}
+
+// ---------- tooltip ----------
+const tip = document.getElementById("tip");
+let pinned = null;
+function placeTip(el) {
+  tip.textContent = el.getAttribute("data-tip"); tip.classList.add("on");
+  const r = el.getBoundingClientRect(), tr = tip.getBoundingClientRect();
+  let x = Math.min(r.left, innerWidth - tr.width - 8), y = r.bottom + 8;
+  if (y + tr.height > innerHeight - 8) y = r.top - tr.height - 8;
+  tip.style.left = Math.max(8, x) + "px"; tip.style.top = y + "px";
+}
+const unpin = () => { pinned = null; tip.classList.remove("on"); };
+document.addEventListener("click", e => {
+  const h = e.target.closest && e.target.closest(".help");
+  if (h) { e.stopPropagation(); e.preventDefault(); if (pinned === h) unpin(); else { pinned = h; placeTip(h); } }
+  else if (pinned) unpin();
+}, true);
+document.addEventListener("focusin", e => { if (e.target.classList && e.target.classList.contains("help")) placeTip(e.target); });
+document.addEventListener("focusout", e => { if (e.target.classList && e.target.classList.contains("help") && pinned !== e.target) tip.classList.remove("on"); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") unpin(); });
+addEventListener("scroll", () => { if (pinned) unpin(); }, { passive: true });
+document.addEventListener("pointermove", e => {
+  const el = e.target.closest && e.target.closest("[data-tip]");
+  if (!el) { if (!pinned) tip.classList.remove("on"); return; }
+  tip.textContent = el.getAttribute("data-tip"); tip.classList.add("on");
+  const r = tip.getBoundingClientRect();
+  let x = e.clientX + 16, y = e.clientY + 16;
+  if (x + r.width > innerWidth - 8) x = e.clientX - r.width - 16;
+  if (y + r.height > innerHeight - 8) y = e.clientY - r.height - 16;
+  tip.style.left = x + "px"; tip.style.top = y + "px";
+});
+document.addEventListener("pointerleave", () => tip.classList.remove("on"));
+
+// ---------- chart helpers ----------
+function ticks(lo, hi, n = 4) {
+  const span = hi - lo || 1, raw = span / n, p = 10 ** Math.floor(Math.log10(raw));
+  const step = [1, 2, 2.5, 5, 10].map(m => m * p).find(s => s >= raw);
+  const a = Math.floor(lo / step) * step, b = Math.ceil(hi / step) * step, res = [];
+  for (let v = a; v <= b + step / 2; v += step) res.push(+v.toFixed(10));
+  return res;
+}
+const W = el => Math.max(280, el.clientWidth);
+const every = w => (w < 560 ? 6 : 3);
+const svgOpen = (w, h) => `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" role="img">`;
+const fmtPctTick = v => `${+(v * 100).toFixed(1)}%`;
+
+function spark(vals, w = 160, h = 30) {
+  const v = vals.filter(x => x != null); if (v.length < 2) return "";
+  const lo = Math.min(...v), hi = Math.max(...v) || 1;
+  const sx = i => 2 + i * (w - 6) / (vals.length - 1), sy = x => h - 3 - (x - lo) / ((hi - lo) || 1) * (h - 6);
+  const pts = vals.map((x, i) => `${sx(i).toFixed(1)},${sy(x).toFixed(1)}`);
+  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" aria-hidden="true">
+    <path d="M${sx(0)},${h - 1} L${pts.join(" L")} L${sx(vals.length - 1)},${h - 1} Z" fill="var(--s1-wash)"/>
+    <polyline points="${pts.join(" ")}" fill="none" stroke="var(--s1)" stroke-width="1.5"/>
+    <rect x="${sx(vals.length - 1) - 2.5}" y="${sy(vals[vals.length - 1]) - 2.5}" width="5" height="5" fill="var(--brand)"/></svg>`;
+}
+
+// line chart over months; series: [{name, col, vals, fill}]
+function lines(el, { series, hi: hiIdx, fmt, tipFn, ref, refLabel, h = 260, endLabels = false }) {
+  const w = W(el), m = { l: 48, r: endLabels ? 84 : 24, t: 16, b: 28 };
+  const all = series.flatMap(s => s.vals).filter(v => v != null).concat(ref ?? []);
+  const tk = ticks(Math.min(...all) * 0.95, Math.max(...all) * 1.04, 4), lo = tk[0], hi = tk[tk.length - 1];
+  const n = series[0].vals.length;
+  const x = i => m.l + i * (w - m.l - m.r) / (n - 1), y = v => m.t + (1 - (v - lo) / (hi - lo)) * (h - m.t - m.b);
+  const ev = every(w), colW = (w - m.l - m.r) / (n - 1);
+  let s = svgOpen(w, h);
+  for (const t of tk) s += `<line class="grid" x1="${m.l}" x2="${w - m.r}" y1="${y(t)}" y2="${y(t)}"/><text x="${m.l - 8}" y="${y(t) + 4}" text-anchor="end">${fmt(t)}</text>`;
+  for (let i = 0; i < n; i++) if ((n - 1 - i) % ev === 0) s += `<text x="${x(i)}" y="${h - 8}" text-anchor="${i === n - 1 ? "end" : "middle"}">${mLabel(i)}</text>`;
+  if (ref != null) s += `<line x1="${m.l}" x2="${w - m.r}" y1="${y(ref)}" y2="${y(ref)}" stroke="var(--ref)" stroke-width="1.5" stroke-dasharray="5 4"/><text x="${w - m.r - 4}" y="${y(ref) + 18}" text-anchor="end" class="lbl">${esc(refLabel)}</text>`;
+  s += `<line x1="${x(hiIdx)}" x2="${x(hiIdx)}" y1="${m.t}" y2="${h - m.b}" stroke="var(--brand)" stroke-width="1" stroke-dasharray="2 3"/>`;
+  for (const se of series) {
+    const idx = se.vals.map((v, i) => [v, i]).filter(([v]) => v != null);
+    if (!idx.length) continue;
+    const pts = idx.map(([v, i]) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`);
+    if (se.fill) s += `<path d="M${x(idx[0][1])},${y(lo)} L${pts.join(" L")} L${x(idx[idx.length - 1][1])},${y(lo)} Z" fill="var(--s1-wash)"/>`;
+    s += `<polyline points="${pts.join(" ")}" fill="none" stroke="var(${se.col})" stroke-width="2"/>`;
+    const hv = se.vals[hiIdx];
+    if (hv != null) s += `<rect x="${x(hiIdx) - 4.5}" y="${y(hv) - 4.5}" width="9" height="9" fill="var(${se.col})" stroke="var(--surface)" stroke-width="1.5"/>`;
+    if (endLabels) { const [lv, li] = idx[idx.length - 1]; s += `<text x="${x(li) + 10}" y="${y(lv) + 4}" class="lbl">${esc(se.name)}</text>`; }
+  }
+  if (series.length === 1 && series[0].vals[hiIdx] != null) {
+    const hv = series[0].vals[hiIdx];
+    s += `<text x="${Math.min(x(hiIdx), w - m.r)}" y="${y(hv) - 12}" text-anchor="${hiIdx > n - 4 ? "end" : "middle"}" class="val">${fmt(hv)}</text>`;
+  }
+  for (let i = 0; i < n; i++) {
+    s += `<g class="hov"><line class="guide" x1="${x(i)}" x2="${x(i)}" y1="${m.t}" y2="${h - m.b}"/>${series.map(se => se.vals[i] == null ? "" : `<circle class="dot" cx="${x(i)}" cy="${y(se.vals[i])}" r="4" fill="var(${se.col})"/>`).join("")}
+      <rect class="hit" x="${x(i) - colW / 2}" y="${m.t}" width="${colW}" height="${h - m.t - m.b}" data-tip="${esc(tipFn(i))}"/></g>`;
+  }
+  el.innerHTML = s + "</svg>";
+}
+
+// stacked columns over months; keys: [[k,label,colVar]], cols: [{vals:[...]}]
+function stackCols(el, { cols, keys, hi: hiIdx, tipFn, line, fmtY = v => fmtM(v, 0), h = 260, onClick }) {
+  const w = W(el), m = { l: 56, r: 16, t: 16, b: 28 };
+  const tot = cols.map(c => c.vals.reduce((a, b) => a + b, 0));
+  const tk = ticks(0, Math.max(...tot, ...(line || [0])) * 1.04 || 1, 4), top = tk[tk.length - 1];
+  const n = cols.length, step = (w - m.l - m.r) / n, bw = Math.max(4, Math.min(30, step * 0.64));
+  const y = v => m.t + (1 - v / top) * (h - m.t - m.b), cx = i => m.l + step * (i + 0.5), ev = every(w);
+  let s = svgOpen(w, h);
+  for (const t of tk) s += `<line class="grid" x1="${m.l}" x2="${w - m.r}" y1="${y(t)}" y2="${y(t)}"/><text x="${m.l - 8}" y="${y(t) + 4}" text-anchor="end">${fmtY(t)}</text>`;
+  cols.forEach((c, i) => {
+    if ((n - 1 - i) % ev === 0) s += `<text x="${cx(i)}" y="${h - 8}" text-anchor="middle">${mLabel(i)}</text>`;
+    let acc = 0, gs = `<g class="col${onClick ? " clk" : ""}" data-i="${i}" ${i === hiIdx || hiIdx == null ? "" : 'opacity=".55"'}>`;
+    const lastJ = c.vals.reduce((a, v, j) => (v > 0 ? j : a), -1);
+    c.vals.forEach((v, j) => {
+      if (v <= 0) return;
+      const y0 = y(acc), y1 = y(acc + v); acc += v;
+      const gap = j === lastJ ? 0 : 2;
+      gs += `<rect class="seg" x="${cx(i) - bw / 2}" y="${y1 + gap}" width="${bw}" height="${Math.max(0, y0 - y1 - gap)}" fill="var(${keys[j][2]})"/>`;
+    });
+    gs += `<rect class="hit" x="${cx(i) - step / 2}" y="${m.t}" width="${step}" height="${h - m.t - m.b}" data-tip="${esc(tipFn(i))}"/></g>`;
+    s += gs;
+  });
+  if (line) s += `<polyline points="${line.map((v, i) => `${cx(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ")}" fill="none" stroke="var(--ink)" stroke-width="2" pointer-events="none"/>`;
+  s += `<line class="base" x1="${m.l}" x2="${w - m.r}" y1="${y(0)}" y2="${y(0)}"/>`;
+  el.innerHTML = s + "</svg>";
+  if (onClick) el.querySelectorAll(".col").forEach(gg => gg.addEventListener("click", () => onClick(+gg.dataset.i)));
+}
+
+// horizontal stacked rows; rows: [{key,label,vals,end,tip}]
+function hStack(el, { rows, keys, onClick, lw: lwIn }) {
+  const w = W(el), lw = lwIn || Math.min(170, w * 0.34), rw = 120, bh = 20, gap = 14, h = rows.length * (bh + gap) + 6;
+  const max = Math.max(...rows.map(r => r.vals.reduce((a, b) => a + b, 0))) || 1;
+  const sx = v => v / max * (w - lw - rw);
+  let s = svgOpen(w, h);
+  rows.forEach((r, i) => {
+    const y = 3 + i * (bh + gap);
+    let x = lw, gs = `<g class="row${onClick ? " clk" : ""}" data-k="${esc(r.key)}"><text class="lbl" x="${lw - 12}" y="${y + bh / 2 + 4}" text-anchor="end">${esc(r.label)}</text>`;
+    const lastJ = r.vals.reduce((a, v, j) => (v > 0 ? j : a), -1);
+    r.vals.forEach((v, j) => {
+      if (v <= 0) return;
+      gs += `<rect class="seg" x="${x}" y="${y}" width="${Math.max(1, sx(v) - (j === lastJ ? 0 : 2))}" height="${bh}" fill="var(${keys[j][2]})"/>`;
+      x += sx(v);
+    });
+    gs += `<text x="${x + 10}" y="${y + bh / 2 + 4}" class="val">${esc(r.end)}</text>`;
+    gs += `<rect class="hit" x="0" y="${y - gap / 2}" width="${w}" height="${bh + gap}" data-tip="${esc(r.tip)}"/></g>`;
+    s += gs;
+  });
+  s += `<line class="base" x1="${lw}" x2="${lw}" y1="0" y2="${h}"/>`;
+  el.innerHTML = s + "</svg>";
+  if (onClick) el.querySelectorAll(".row").forEach(gg => gg.addEventListener("click", () => onClick(gg.dataset.k)));
+}
+
+// signed horizontal bars (change contributions); rows: [{key,label,v,tip}]
+function signedBars(el, { rows, fmt, onClick }) {
+  const w = W(el), lw = Math.min(190, w * 0.38), rw = 70, bh = 18, gap = 14, h = rows.length * (bh + gap) + 6;
+  const lo = Math.min(0, ...rows.map(r => r.v)), hi = Math.max(0, ...rows.map(r => r.v));
+  const sx = v => lw + 8 + (v - lo) / ((hi - lo) || 1) * (w - lw - rw - 8);
+  let s = svgOpen(w, h);
+  rows.forEach((r, i) => {
+    const y = 3 + i * (bh + gap), x0 = sx(Math.min(0, r.v)), x1 = sx(Math.max(0, r.v));
+    s += `<g class="row${onClick ? " clk" : ""}" data-k="${esc(r.key)}"><text class="lbl" x="${lw - 4}" y="${y + bh / 2 + 4}" text-anchor="end">${esc(r.label)}</text>
+      <rect class="seg" x="${x0}" y="${y}" width="${Math.max(1, x1 - x0)}" height="${bh}" fill="var(${r.v >= 0 ? "--crit" : "--good"})"/>
+      <text x="${r.v >= 0 ? x1 + 8 : x0 - 8}" y="${y + bh / 2 + 4}" text-anchor="${r.v >= 0 ? "start" : "end"}" class="val">${r.v >= 0 ? "+" : ""}${fmt(r.v)}</text>
+      <rect class="hit" x="0" y="${y - gap / 2}" width="${w}" height="${bh + gap}" data-tip="${esc(r.tip)}"/></g>`;
+  });
+  s += `<line class="base" x1="${sx(0)}" x2="${sx(0)}" y1="0" y2="${h}"/>`;
+  el.innerHTML = s + "</svg>";
+  if (onClick) el.querySelectorAll(".row").forEach(gg => gg.addEventListener("click", () => onClick(gg.dataset.k)));
+}
+
+// horizontal waterfall; steps: [{label, v, total, tip}]
+function waterfall(el, { steps }) {
+  const w = W(el), lw = Math.min(170, w * 0.32), rw = 84, bh = 20, gap = 14, h = steps.length * (bh + gap) + 6;
+  let cum = 0;
+  const bars = steps.map(s0 => { const b = s0.total ? { ...s0, x0: 0, x1: s0.v } : { ...s0, x0: cum, x1: cum + s0.v }; cum = b.x1; return b; });
+  const max = Math.max(...bars.map(b => Math.max(b.x0, b.x1))) * 1.02 || 1, min = Math.min(0, ...bars.map(b => Math.min(b.x0, b.x1)));
+  const sx = v => lw + (v - min) / (max - min) * (w - lw - rw);
+  let s = svgOpen(w, h);
+  bars.forEach((b, i) => {
+    const y = 3 + i * (bh + gap), a = sx(Math.min(b.x0, b.x1)), z = sx(Math.max(b.x0, b.x1));
+    const col = b.total ? "--secured" : b.v >= 0 ? "--crit" : "--good";
+    if (i > 0) s += `<line x1="${sx(bars[i - 1].x1)}" x2="${sx(bars[i - 1].x1)}" y1="${y - gap}" y2="${y}" stroke="var(--line-2)" stroke-dasharray="2 2"/>`;
+    s += `<g class="row"><text class="lbl" x="${lw - 12}" y="${y + bh / 2 + 4}" text-anchor="end">${esc(b.label)}</text>
+      <rect class="seg" x="${a}" y="${y}" width="${Math.max(1, z - a)}" height="${bh}" fill="var(${col})"/>
+      <text x="${z + 8}" y="${y + bh / 2 + 4}" class="val">${b.total ? fmtM(b.v) : (b.v >= 0 ? "+" : "") + fmtM(b.v)}</text>
+      <rect class="hit" x="0" y="${y - gap / 2}" width="${w}" height="${bh + gap}" data-tip="${esc(b.tip)}"/></g>`;
+  });
+  el.innerHTML = s + "</svg>";
+}
+
+// cumulative concentration curve; vals sorted desc
+function pareto(el, { vals, marks = [10, 20], h = 260 }) {
+  const w = W(el), m = { l: 48, r: 24, t: 16, b: 44 };
+  if (!vals.length) { el.innerHTML = `<p class="note">No overdue in this selection.</p>`; return; }
+  const tot = vals.reduce((a, b) => a + b, 0) || 1, n = vals.length;
+  let c = 0; const cum = vals.map(v => (c += v) / tot);
+  const x = i => m.l + (i + 1) / n * (w - m.l - m.r), y = v => m.t + (1 - v) * (h - m.t - m.b);
+  let s = svgOpen(w, h);
+  for (const t of [0, .25, .5, .75, 1]) s += `<line class="grid" x1="${m.l}" x2="${w - m.r}" y1="${y(t)}" y2="${y(t)}"/><text x="${m.l - 8}" y="${y(t) + 4}" text-anchor="end">${t * 100}%</text>`;
+  for (const v of ticks(0, n, 5).filter(v => v > 0 && v <= n)) s += `<text x="${x(v - 1)}" y="${h - 24}" text-anchor="middle">${v}</text>`;
+  s += `<text x="${(m.l + w - m.r) / 2}" y="${h - 4}" text-anchor="middle">Number of dealers, largest overdue first</text>`;
+  const pts = cum.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`);
+  s += `<path d="M${m.l},${y(0)} L${pts.join(" L")} L${x(n - 1)},${y(0)} Z" fill="var(--s1-wash)"/><polyline points="${m.l},${y(0)} ${pts.join(" ")}" fill="none" stroke="var(--s1)" stroke-width="2"/>`;
+  for (const k of marks) if (k <= n) {
+    const v = cum[k - 1];
+    s += `<line x1="${x(k - 1)}" x2="${x(k - 1)}" y1="${y(v)}" y2="${y(0)}" stroke="var(--brand)" stroke-dasharray="2 3"/>
+      <rect x="${x(k - 1) - 4.5}" y="${y(v) - 4.5}" width="9" height="9" fill="var(--brand)"/>
+      <text x="${x(k - 1) + 10}" y="${y(v) + 18}" class="val">Top ${k}: ${pct(v)}</text>`;
+  }
+  const cw = (w - m.l - m.r) / n;
+  cum.forEach((v, i) => { s += `<rect class="hit" x="${x(i) - cw}" y="${m.t}" width="${cw}" height="${h - m.t - m.b}" data-tip="Top ${i + 1} dealers hold ${pct(v, 1)} of overdue"/>`; });
+  el.innerHTML = s + "</svg>";
+}
+
+// flag history: still flagged + new above zero, cleared below
+function flagHist(el, { data, hi: hiIdx, h = 260 }) {
+  const w = W(el), m = { l: 40, r: 16, t: 16, b: 28 };
+  const pos = Math.max(...data.map(d => d.cont + d.neu), 1), neg = Math.max(...data.map(d => d.clr), 1);
+  const tk = ticks(-neg, pos, 5), lo = tk[0], top = tk[tk.length - 1];
+  const n = data.length, step = (w - m.l - m.r) / n, bw = Math.max(4, Math.min(30, step * 0.64));
+  const y = v => m.t + (1 - (v - lo) / (top - lo)) * (h - m.t - m.b), cx = i => m.l + step * (i + 0.5), ev = every(w);
+  let s = svgOpen(w, h);
+  for (const t of tk) s += `<line class="grid" x1="${m.l}" x2="${w - m.r}" y1="${y(t)}" y2="${y(t)}"/><text x="${m.l - 8}" y="${y(t) + 4}" text-anchor="end">${Math.abs(t)}</text>`;
+  data.forEach((d, i) => {
+    if ((n - 1 - i) % ev === 0) s += `<text x="${cx(i)}" y="${h - 8}" text-anchor="middle">${mLabel(i)}</text>`;
+    let gs = `<g class="col" ${i === hiIdx ? "" : 'opacity=".55"'}>`;
+    if (d.cont) gs += `<rect class="seg" x="${cx(i) - bw / 2}" y="${y(d.cont)}" width="${bw}" height="${y(0) - y(d.cont)}" fill="var(--secured)"/>`;
+    if (d.neu) gs += `<rect class="seg" x="${cx(i) - bw / 2}" y="${y(d.cont + d.neu)}" width="${bw}" height="${Math.max(0, y(d.cont) - y(d.cont + d.neu) - (d.cont ? 2 : 0))}" fill="var(--crit)"/>`;
+    if (d.clr) gs += `<rect class="seg" x="${cx(i) - bw / 2}" y="${y(0) + 2}" width="${bw}" height="${Math.max(0, y(-d.clr) - y(0) - 2)}" fill="var(--good)"/>`;
+    gs += `<rect class="hit" x="${cx(i) - step / 2}" y="${m.t}" width="${step}" height="${h - m.t - m.b}" data-tip="${esc(`${mLabel(i, true)}\nNewly flagged: ${d.neu}\nStill flagged: ${d.cont}\nCleared: ${d.clr}`)}"/></g>`;
+    s += gs;
+  });
+  s += `<line x1="${m.l}" x2="${w - m.r}" y1="${y(0)}" y2="${y(0)}" stroke="var(--ink-2)"/>`;
+  el.innerHTML = s + "</svg>";
+}
+
+function useRank(el, { rows, onClick }) {
+  const w = W(el), lw = Math.min(190, w * 0.4), rw = 56, bh = 16, gap = 12, top = 22, h = top + rows.length * (bh + gap);
+  const max = Math.max(1.2, ...rows.map(r => r.v));
+  const sx = v => lw + v / max * (w - lw - rw);
+  let s = svgOpen(w, h);
+  for (const [ref, lab, anc, dx] of [[TH.use, "90%", "end", -4], [1, "100%", "start", 4]]) s += `<line x1="${sx(ref)}" x2="${sx(ref)}" y1="${top - 6}" y2="${h}" stroke="var(--ref)" stroke-dasharray="3 3"/><text x="${sx(ref) + dx}" y="12" text-anchor="${anc}">${lab}</text>`;
+  rows.forEach((r, k) => {
+    const y = top + k * (bh + gap), col = r.v > 1 ? "var(--crit)" : r.v > TH.use ? "var(--warn)" : "var(--bar)";
+    s += `<g class="row clk" data-i="${r.i}"><text class="lbl" x="${lw - 12}" y="${y + bh / 2 + 4}" text-anchor="end">${esc(r.label)}</text>
+      <rect class="seg" x="${lw}" y="${y}" width="${Math.max(1, sx(r.v) - lw)}" height="${bh}" fill="${col}"/>
+      <text x="${sx(r.v) + 8}" y="${y + bh / 2 + 4}" class="val">${pct(r.v)}</text>
+      <rect class="hit" x="0" y="${y - gap / 2}" width="${w}" height="${bh + gap}" data-tip="${esc(r.tip)}"/></g>`;
+  });
+  s += `<line class="base" x1="${lw}" x2="${lw}" y1="${top - 6}" y2="${h}"/>`;
+  el.innerHTML = s + "</svg>";
+  el.querySelectorAll(".row").forEach(gg => gg.addEventListener("click", () => onClick(+gg.dataset.i)));
+}
+
+// ---------- small UI pieces ----------
+const legend = (keys, extra = "") => `<div class="legend">${keys.map(k => `<span><i style="background:var(${k[2]})"></i>${esc(k[1])}</span>`).join("")}${extra}</div>`;
+const pill = s => s === 2 ? `<span class="pill act">Act</span>` : s === 1 ? `<span class="pill watch">Watch</span>` : `<span class="pill ok">OK</span>`;
+const chips = (f, u) => `<span class="chips">${f.rising ? `<span class="chip c">Overdue rising</span>` : ""}${f.limit ? `<span class="chip${u > 1 ? " c" : ""}">Limit over 90%</span>` : ""}${f.aged ? `<span class="chip">90+ over 10%</span>` : ""}</span>`;
+const useBar = u => `<div class="usebar"><div class="tr"><div class="fl ${u > 1 ? "c" : u > TH.use ? "w" : ""}" style="width:${Math.min(100, u * 100)}%"></div></div><span>${pct(u)}</span></div>`;
+const zero = v => v > 0 ? fmtM(v) : `<span class="zero">–</span>`;
+// delta text: kind rel | pp | abs ; bad = +1 (up is bad), -1 (down is bad), 0 neutral
+function delta(cur, prev, { kind = "rel", bad = 1, unit = "", dp = 1, vs } = {}) {
+  if (prev == null || !isFinite(prev) || (kind === "rel" && !prev)) return "";
+  const d = kind === "rel" ? (cur / prev - 1) * 100 : kind === "pp" ? (cur - prev) * 100 : cur - prev;
+  const shown = Math.abs(d) < 0.05 ? 0 : d;
+  const cls = bad === 0 || shown === 0 ? "" : (shown > 0) === (bad > 0) ? "up-bad" : "up-good";
+  const u = kind === "pp" ? " pp" : kind === "rel" ? "%" : unit;
+  return `<span class="${cls}">${shown > 0 ? "▲ +" : shown < 0 ? "▼ −" : "● "}${Math.abs(shown).toFixed(dp)}${u}</span>${vs ? ` vs ${vs}` : ""}`;
+}
+const kpi = ({ k, v, d, sp, h }) => `<div class="kpi"><span class="k">${k}${h ? help(h + (sp ? " The small line shows the last 12 months." : "")) : ""}</span><span class="v">${v}</span><span class="d">${d}</span>${sp ? spark(sp, 180, 32) : ""}</div>`;
+const card = ({ title, sub, id, body = "", extra = "" }) => `<div class="card"><h3>${title}${sub ? help(sub) : ""}</h3><div class="body">${id ? `<div class="chart" id="${id}"></div>` : ""}${body}</div>${extra}</div>`;
+const help = t => `<button type="button" class="help" data-tip="${esc(t)}" aria-label="${esc(t)}">?</button>`;
+const phead = (q, how) => `<div class="phead"><h2>${q}${help(how.charAt(0).toUpperCase() + how.slice(1))}</h2></div>`;
+const actionAsOf = D.actionsAsOf;
+const logOn = () => st.t === actionAsOf;          // the collections log describes one month only
+const act = i => logOn() ? D.actions[i] : null;
+const pl = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+const topWord = n => n === 10 ? "Ten" : String(n);
+const shareOf = (v, tot) => v <= tot ? `drove ${pct(v / tot)} of` : `added ${fmtM(v)}, more than all of`;
+const bindRows = () => main.querySelectorAll("tr.go").forEach(tr => { tr.onclick = () => goDealer(+tr.dataset.i); tr.onkeydown = e => { if (e.key === "Enter") goDealer(+tr.dataset.i); }; });
+
+function goDealer(i) { st.dealer = i; st.page = "dealer"; render(); scrollTo({ top: 0 }); }
+function goPage(p, extra = {}) { Object.assign(st, extra); st.page = p; render(); scrollTo({ top: 0 }); }
+const setMonth = k => { st.t = k; syncFilters(); render(); };
+
+const main = document.getElementById("main");
+
+// ======================= OVERVIEW =======================
+function pageOverview() {
+  const I = ids(), t = st.t, t0 = Math.max(0, t - 3), a = agg(I, t), p = t > 0 ? agg(I, t - 1) : null, a0 = agg(I, t0);
+  const series = Array.from({ length: M }, (_, k) => agg(I, k));
+  const last12 = f => series.slice(Math.max(0, t - 11), t + 1).map(f);
+  const prevLbl = t ? mLabel(t - 1) : null;
+
+  const dOd = a.od - a0.od;
+  const regD = REGIONS.map(r => { const R = I.filter(i => D.dealers[i].region === r); return [r, R.reduce((s, i) => s + od(i, t) - od(i, t0), 0)]; }).filter(([, v]) => v !== 0);
+  const dealerD = I.map(i => od(i, t) - od(i, t0)).sort((x, y) => y - x);
+  let m2;
+  if (dOd > 0 && regD.length) {
+    const [r, v] = [...regD].sort((x, y) => y[1] - x[1])[0];
+    const top10 = dealerD.slice(0, 10).reduce((s, v2) => s + Math.max(0, v2), 0);
+    const nTop = Math.min(10, dealerD.filter(v2 => v2 > 0).length);
+    m2 = `${r} ${shareOf(v, dOd)} the ${fmtM(dOd)} rise in overdue since ${mLabel(t0, true)}. ` +
+      (top10 <= dOd ? `${topWord(nTop)} dealer${nTop === 1 ? "" : "s"} account for ${pct(top10 / dOd)} of it.` : `The ${nTop} largest increases add up to ${fmtM(top10)}, more than the net rise.`);
+  } else if (regD.length) {
+    const [r] = [...regD].sort((x, y) => x[1] - y[1])[0];
+    m2 = `Overdue fell by ${fmtM(-dOd)} since ${mLabel(t0, true)}, mostly in ${r}.`;
+  } else m2 = `Overdue is unchanged since ${mLabel(t0, true)}.`;
+  const FI = I.filter(i => FL[i][t].any), fOut = FI.reduce((s, i) => s + out(i, t), 0), fUns = FI.reduce((s, i) => s + unsec(i, t), 0);
+  const msgs = [
+    `Overdue is ${pct(a.odPct, 1)} of receivables (${fmtM(a.od)}), ${dirWord(a.odPct - a0.odPct, 5e-4)} ${Math.abs((a.odPct - a0.odPct) * 100).toFixed(1)} pp since ${mLabel(t0, true)}. Dealers pay ${Math.round(a.late)} days late on average, against ${Math.round(a0.late)} days then.`,
+    m2,
+    FI.length ? `${FI.length} of ${I.length} dealers are flagged and ${a.act} need action. ${fmtM(fUns)} of their ${fmtM(fOut)} balance (${pct(fOut ? fUns / fOut : 0)}) is not covered by collateral.`
+      : `No dealer in this selection trips a warning rule.`,
+  ];
+
+  const kp = [
+    { k: "Overdue share of receivables", h: "Overdue ÷ receivables at month-end. Overdue is any balance past its due date (invoice date + payment terms). Red arrow: worse than last month.", v: pct(a.odPct, 1), d: `${fmtM(a.od)} of ${fmtM(a.out)} · ${delta(a.odPct, p?.odPct, { kind: "pp", vs: prevLbl })}`, sp: last12(s => s.odPct) },
+    { k: "Average days paid late", h: "DSO minus days on terms. DSO = receivables ÷ last 3 months' sales × days. Days on terms is the DSO dealers would have if they all paid exactly on time.", v: `${Math.round(a.late)} <small>days</small>`, d: `DSO ${Math.round(a.dso)} = ${Math.round(a.bp)} on terms + ${Math.round(a.late)} late · ${delta(a.late, p?.late, { kind: "abs", unit: "d", dp: 0 })}`, sp: last12(s => s.late) },
+    { k: "Over 90 days overdue", h: "Balance more than 90 days past its due date, as a share of receivables.", v: pct(a.b3Pct, 1), d: `${fmtM(a.b3)} of receivables · ${delta(a.b3Pct, p?.b3Pct, { kind: "pp", vs: prevLbl })}`, sp: last12(s => s.b3Pct) },
+    { k: "Not covered by collateral", h: "Receivables above the bank guarantee letters, DBS bank limits and mortgages in force, added up dealer by dealer.", v: fmtM(a.unsec), d: `${pct(a.out ? a.unsec / a.out : 0)} of receivables · ${delta(a.unsec, p?.unsec, { vs: prevLbl })}`, sp: last12(s => s.unsec) },
+    { k: "Dealers flagged", h: "Dealers that trip at least one warning rule. Act: two or more rules. Watch: one. The Flags page lists the rules.", v: `${a.flagged} <small>of ${a.n}</small>`, d: `${a.act} act, ${a.flagged - a.act} watch · ${delta(a.flagged, p?.flagged, { kind: "abs", dp: 0, vs: prevLbl })}`, sp: last12(s => s.flagged) },
+    { k: "Orders blocked this month", h: "Order value held back this month because the dealer was at or over its credit limit.", v: fmtM(a.blocked), d: `Sales held back by credit control · ${delta(a.blocked, p?.blocked, { vs: prevLbl })}`, sp: last12(s => s.blocked) },
+  ];
+
+  const watch = I.filter(i => FL[i][t].any).sort((x, y) => FL[y][t].sev - FL[x][t].sev || od(y, t) - od(x, t));
+  const regs = REGIONS.map(r => { const R = I.filter(i => D.dealers[i].region === r); return [r, R.length ? agg(R, t) : null]; }).filter(x => x[1]).sort((x, y) => y[1].od - x[1].od);
+  const worstReg = [...regs].sort((x, y) => y[1].odPct - x[1].odPct)[0];
+  const tY = Math.max(0, t - 12);
+
+  main.innerHTML = `<section class="page">
+    ${phead("How healthy are dealer receivables, and who needs a call first?",
+      `figures are month-end balances for ${esc(scope())} as of ${mLabel(t, true)}. Arrows compare with the previous month; red means worse, green means better.`)}
+    <p class="firsttime">First time here? <button class="linkbtn" type="button" data-tour>Take the one-minute tour</button> or <button class="linkbtn" type="button" data-nav="guide">open the Appendix</button>.</p>
+    <div class="card" id="t-messages"><h3>Key messages for ${mLabel(t, true)}</h3><ul class="messages">${msgs.map(m => `<li>${esc(m)}</li>`).join("")}</ul></div>
+    <p class="section-label">Headline measures</p>
+    <div class="kpis" id="t-kpis">${kp.map(kpi).join("")}</div>
+    <p class="section-label">Action list</p>
+    <div class="card" id="t-actions">
+      <h3>${watch.length ? `${pl(watch.length, "dealer needs", "dealers need")} follow-up, ${a.act} urgently` : "No dealer needs follow-up"}${help(`Flagged dealers, most flags first, then largest overdue. Owner, next step and promise to pay come from the collections log${t !== actionAsOf ? ` (current status, ${mLabel(actionAsOf, true)})` : ""}. Click a row to open the dealer.`)}</h3>
+      <div class="body">${watch.length ? `<div class="tbl-wrap"><table><thead><tr><th class="r">#</th><th>Dealer</th><th>Status${help("Act: two or more warning rules tripped. Watch: one.")}</th><th class="r">Overdue</th><th>Limit use${help("Balance ÷ credit limit. Amber above 90%, red above 100%.")}</th>${logOn() ? `<th>Next step${help("Next collection action, with its owner and status, from the collections log.")}</th><th>Promise to pay${help("Date and amount the dealer committed to pay, from the collections log.")}</th>` : ""}</tr></thead><tbody>
+        ${watch.slice(0, 10).map((i, r) => { const d = D.dealers[i], f = FL[i][t], ac = act(i);
+          return `<tr class="go" data-i="${i}" tabindex="0"><td class="r">${r + 1}</td>
+          <td><div>${esc(d.dealer_name)}</div><div class="meta">${esc(d.city)} · ${esc(d.region)} · ${d.brand}</div></td>
+          <td><div class="statuscell">${pill(f.sev)}${chips(f, use(i, t))}</div></td>
+          <td class="r">${fmtM(od(i, t))}<div class="meta">${pct(out(i, t) ? od(i, t) / out(i, t) : 0)} of balance</div></td>
+          <td>${useBar(use(i, t))}</td>
+          ${logOn() ? `<td>${ac ? `${esc(ac.step)}<div class="meta">${esc(ac.owner)} · ${esc(ac.status)}</div>` : `<span class="zero">–</span>`}</td>
+          <td>${ac && ac.ptp ? `${dayStr(ac.ptp)}<div class="meta">${fmtM(ac.ptpAmt)}</div>` : `<span class="zero">–</span>`}</td>` : ""}</tr>`; }).join("")}
+        </tbody></table></div>${logOn() ? "" : `<p class="note" style="margin-top:16px">Owner, next step and promise to pay come from the collections log, which covers ${mLabel(actionAsOf, true)} only.</p>`}${watch.length > 10 ? `<p class="note" style="margin-top:16px">${watch.length - 10} more on the <a class="inline-link" data-nav="dealers" data-chip="flagged">Dealers page</a>.</p>` : ""}` : ""}</div>
+    </div>
+    <p class="section-label">Trend and breakdown</p>
+    <div class="grid2">
+      ${card({ title: `Overdue share went from ${pct(series[tY].odPct, 1)} in ${mLabel(tY, true)} to ${pct(a.odPct, 1)}`, sub: "Overdue as a share of receivables at each month-end. A ratio, so inflation does not distort it.", id: "c-odpct" })}
+      ${card({ title: !worstReg ? "Overdue by region" : regs.length === 1 ? `Overdue in ${worstReg[0]} by aging bucket: ${fmtM(worstReg[1].od)}, ${pct(worstReg[1].odPct)} of receivables` : `${worstReg[0]} has the highest overdue share at ${pct(worstReg[1].odPct)}`, sub: `Overdue by aging bucket per region, ${mLabel(t, true)}. The label shows overdue and its share of the region's receivables. Click a region to filter.`, id: "c-region", extra: legend(BKK) })}
+    </div>
+  </section>`;
+
+  bindRows();
+  const draw = () => {
+    lines(document.getElementById("c-odpct"), {
+      series: [{ name: "Overdue share", col: "--s1", vals: series.map(s => s.odPct), fill: true }], hi: t, fmt: fmtPctTick,
+      tipFn: k => `${mLabel(k, true)}\nOverdue ${pct(series[k].odPct, 1)} of receivables\n${fmtM(series[k].od)} of ${fmtM(series[k].out)}`,
+    });
+    hStack(document.getElementById("c-region"), {
+      keys: BKK, rows: regs.map(([r, x]) => ({ key: r, label: r, vals: BK.map(b => x[b.k]), end: `${fmtM(x.od)} · ${pct(x.odPct)}`,
+        tip: `${r}\nReceivables ${fmtM(x.out)}\nOverdue ${fmtM(x.od)} (${pct(x.odPct, 1)})\n${BK.map(b => `${b.label}: ${fmtM(x[b.k])}`).join("\n")}\nDays paid late: ${Math.round(x.late)}` })),
+      onClick: r => { st.region = st.region === r ? "" : r; syncFilters(); render(); },
+    });
+  };
+  draw(); return draw;
+}
+
+// ======================= DRIVERS =======================
+function pageDrivers() {
+  const I = ids(), t = st.t, t0 = Math.max(0, t - st.cmp), a = agg(I, t), a0 = agg(I, t0);
+  const series = Array.from({ length: M }, (_, k) => agg(I, k));
+  const dOd = a.od - a0.od;
+  const regs = REGIONS.map(r => { const R = I.filter(i => D.dealers[i].region === r); return { r, n: R.length, v: R.reduce((s, i) => s + od(i, t) - od(i, t0), 0) }; }).filter(x => x.n).sort((x, y) => y.v - x.v);
+  const lead = regs.length ? (dOd >= 0 ? regs[0] : regs[regs.length - 1]) : { r: "–", v: 0 };
+  const ch = I.map(i => ({ i, v: od(i, t) - od(i, t0) })).sort((x, y) => y.v - x.v);
+  const topUp = ch.slice(0, 10), top10Sum = topUp.reduce((s, x) => s + Math.max(0, x.v), 0), nUp = Math.min(10, ch.filter(x => x.v > 0).length);
+  const odSorted = I.map(i => od(i, t)).filter(v => v > 0).sort((x, y) => y - x);
+  const odTot = odSorted.reduce((s, v) => s + v, 0), top10Share = odTot ? odSorted.slice(0, 10).reduce((s, v) => s + v, 0) / odTot : 0;
+  // roll rates are noisy month to month, so show a 3-month average
+  const avg3 = (k, j) => { const v = [k - 2, k - 1, k].filter(x => x >= 0).map(x => series[x].roll[j]).filter(x => x != null); return v.length ? v.reduce((p2, q2) => p2 + q2, 0) / v.length : null; };
+  const rollAvg = [0, 1, 2].map(j => series.map((_, k) => avg3(k, j)));
+  const r1 = rollAvg[1][t], r1o = rollAvg[1][t0];
+  const cmpLbl = mLabel(t0, true);
+
+  main.innerHTML = `<section class="page">
+    ${phead("What is driving overdue, and is it late payment or longer terms?",
+      `each chart compares ${mLabel(t, true)} with an earlier month you pick below. Red bars add to overdue, green bars reduce it. Ratios are used where inflation would distort lira amounts.`)}
+    <div class="toolbar" id="t-compare"><div class="f"><label>Compare ${mLabel(t, true)} with</label>
+      <div class="seg" role="group" aria-label="Comparison period">${[[1, "1 month earlier"], [3, "3 months earlier"], [12, "12 months earlier"]].map(([v, l]) => `<button type="button" data-cmp="${v}" aria-pressed="${st.cmp === v}">${l}</button>`).join("")}</div></div></div>
+    <div class="grid2" id="t-drivers">
+      ${card({ title: dOd > 0 ? `${lead.r} ${shareOf(lead.v, dOd)} the ${fmtM(dOd)} rise in overdue` : dOd < 0 ? `Overdue fell by ${fmtM(-dOd)}, led by ${lead.r}` : "Overdue is unchanged",
+        sub: `Overdue in ${cmpLbl}, the change in each region, and overdue in ${mLabel(t, true)}.`, id: "c-wf" })}
+      ${card({ title: dOd > 0 ? (top10Sum <= dOd ? `${topWord(nUp)} dealer${nUp === 1 ? "" : "s"} account for ${pct(top10Sum / dOd)} of the rise` : `The ${nUp} largest increases add up to ${fmtM(top10Sum)}`) : "Dealers with the largest change in overdue",
+        sub: `Change in overdue since ${cmpLbl}, ten largest increases. Click a dealer to open it.`, id: "c-dealers" })}
+      ${card({ title: odSorted.length <= 10 ? `${pl(odSorted.length, "dealer holds", "dealers hold")} all overdue` : `The top 10 dealers hold ${pct(top10Share)} of all overdue`, sub: `Cumulative share of overdue, ${mLabel(t, true)}. A steep curve means the risk sits with a few dealers.`, id: "c-pareto" })}
+      ${card({ title: `DSO is ${dirWord(a.dso - a0.dso, .5)} ${Math.abs(Math.round(a.dso - a0.dso))} days; late payment is ${dirWord(a.late - a0.late, .5)} ${Math.abs(Math.round(a.late - a0.late))} days`,
+        sub: "DSO split into days on agreed terms (best possible DSO) and days paid late. Only the red part reflects collection performance.", id: "c-dso",
+        extra: legend([["bp", "Days on terms", "--secured"], ["late", "Days paid late", "--crit"]]) })}
+      ${card({ title: r1 != null ? `${pct(r1)} of 31–60 day debt stays unpaid a month later${r1o == null ? "" : pct(r1o) === pct(r1) ? `, unchanged since ${cmpLbl}` : `, against ${pct(r1o)} in ${cmpLbl}`}` : "Share of overdue still unpaid a month later",
+        sub: "Roll rate, 3-month average: of the balance in each bucket last month, the share still unpaid this month. Rising lines mean debt is ageing faster.", id: "c-roll",
+        extra: legend([["", "Was 0–30 days", "--b1"], ["", "Was 31–60 days", "--b2"], ["", "Was 61–90 days", "--b3"]]) })}
+      ${card({ title: `90+ day debt is ${pct(a.b3Pct, 1)} of receivables, ${dirWord(a.b3Pct - a0.b3Pct, 5e-4)} ${Math.abs((a.b3Pct - a0.b3Pct) * 100).toFixed(1)} pp`,
+        sub: "Each aging bucket as a share of receivables at month-end. Click a bar to change the as-of month.", id: "c-aging", extra: legend(BKK) })}
+    </div>
+  </section>`;
+  main.querySelectorAll("[data-cmp]").forEach(b => b.onclick = () => { st.cmp = +b.dataset.cmp; render(); });
+  const draw = () => {
+    waterfall(document.getElementById("c-wf"), { steps: [
+      { label: `Overdue ${mLabel(t0)}`, v: a0.od, total: true, tip: `Overdue at ${cmpLbl}: ${fmtM(a0.od)}` },
+      ...regs.map(x => ({ label: x.r, v: x.v, tip: `${x.r}: ${x.v >= 0 ? "+" : ""}${fmtM(x.v)} since ${cmpLbl}` })),
+      { label: `Overdue ${mLabel(t)}`, v: a.od, total: true, tip: `Overdue at ${mLabel(t, true)}: ${fmtM(a.od)}` },
+    ] });
+    signedBars(document.getElementById("c-dealers"), {
+      rows: topUp.map(x => { const d = D.dealers[x.i]; return { key: x.i, label: `${d.dealer_name.split(" ")[0]} · ${d.city}`, v: x.v,
+        tip: `${d.dealer_name}, ${d.city}\nOverdue ${fmtM(od(x.i, t0))} → ${fmtM(od(x.i, t))}` }; }), fmt: v => fmtM(v), onClick: k => goDealer(+k),
+    });
+    pareto(document.getElementById("c-pareto"), { vals: odSorted });
+    stackCols(document.getElementById("c-dso"), {
+      cols: series.map(s => ({ vals: [s.bp, s.late] })), keys: [["bp", "Days on terms", "--secured"], ["late", "Days paid late", "--crit"]], hi: t, fmtY: v => `${v}`,
+      tipFn: k => `${mLabel(k, true)}\nDSO ${Math.round(series[k].dso)} days\nOn terms ${Math.round(series[k].bp)} · late ${Math.round(series[k].late)}\nAgreed terms (weighted) ${Math.round(series[k].terms)} days`,
+      onClick: setMonth,
+    });
+    lines(document.getElementById("c-roll"), {
+      series: [["Was 0–30", "--b1", 0], ["Was 31–60", "--b2", 1], ["Was 61–90", "--b3", 2]].map(([nm, col, j]) => ({ name: nm, col, vals: rollAvg[j] })),
+      hi: t, fmt: v => `${Math.round(v * 100)}%`,
+      tipFn: k => `${mLabel(k, true)}, 3-month average\nStill unpaid a month later:\n${["0–30", "31–60", "61–90"].map((l, j) => `was ${l} days: ${rollAvg[j][k] == null ? "–" : pct(rollAvg[j][k])}`).join("\n")}`,
+    });
+    stackCols(document.getElementById("c-aging"), {
+      cols: series.map(s => ({ vals: BK.map(b => s.out ? s[b.k] / s.out : 0) })), keys: BKK, hi: t, fmtY: fmtPctTick,
+      tipFn: k => `${mLabel(k, true)} · overdue ${pct(series[k].odPct, 1)} of receivables\n${BK.map(b => `${b.label}: ${pct(series[k].out ? series[k][b.k] / series[k].out : 0, 1)} (${fmtM(series[k][b.k])})`).reverse().join("\n")}`,
+      onClick: setMonth,
+    });
+  };
+  draw(); return draw;
+}
+
+// ======================= FLAGS =======================
+function backtest(I, t) {
+  const t0 = t - TH.lookback; if (t0 < 0) return null;
+  const outcome = i => FL[i][t].aged;
+  const rule = (name, test) => { const F = I.filter(i => test(FL[i][t0])); const bad = F.filter(outcome).length; return { name, n: F.length, bad, rate: F.length ? bad / F.length : null }; };
+  const rows = [rule("Overdue rising", f => f.rising), rule("Limit over 90%", f => f.limit), rule("90+ over 10%", f => f.aged), rule("Any flag", f => f.any)];
+  return { t0, rows, base: rule("No flag", f => !f.any) };
+}
+function pageFlags() {
+  const I = ids(), t = st.t;
+  const hist = Array.from({ length: M }, (_, k) => {
+    let cont = 0, neu = 0, clr = 0;
+    // first month has no prior month: count its flags as a baseline, not as new
+    for (const i of I) { const now = FL[i][k].any, was = k === 0 ? now : FL[i][k - 1].any; if (now && was) cont++; else if (now) neu++; else if (was) clr++; }
+    return { cont, neu, clr };
+  });
+  const bt = backtest(I, t), anyRow = bt && bt.rows[3];
+  const lift = bt && anyRow.rate != null && bt.base.rate ? anyRow.rate / bt.base.rate : null;
+  const nLim = I.filter(i => FL[i][t].limit).length;
+  const top = I.map(i => [i, use(i, t)]).sort((x, y) => y[1] - x[1]).slice(0, 15);
+  const btTitle = !bt ? "The back-test needs six months of history"
+    : lift ? `Flagged dealers were ${lift.toFixed(1)} times as likely to end up 90+ days late`
+    : anyRow.rate != null ? `${pct(anyRow.rate)} of dealers flagged in ${mLabel(bt.t0, true)} are now over 10% 90+ days late, against ${pct(bt.base.rate || 0)} of the rest`
+    : `No dealer was flagged in ${mLabel(bt.t0, true)}`;
+
+  main.innerHTML = `<section class="page">
+    ${phead("Which dealers trip the warning rules, and do the rules work?",
+      "a dealer is flagged when it breaks any of three simple rules. Act means two or more flags, Watch means one. The back-test checks what happened to dealers flagged six months earlier.")}
+    <div class="card" id="t-flags">
+      <h3>${pl(hist[t].neu, "dealer", "dealers")} newly flagged in ${mLabel(t, true)}, ${hist[t].clr} cleared, ${hist[t].cont} still flagged${help(`Flagged dealers per month. Grey: still flagged from last month. Red: newly flagged. Green, below the line: cleared this month.`)}</h3>
+      <div class="body"><div class="chart" id="c-hist"></div></div>
+      ${legend([["", "Still flagged", "--secured"], ["", "Newly flagged", "--crit"], ["", "Cleared", "--good"]])}
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <h3>${btTitle}${help(`${bt ? `Dealers flagged in ${mLabel(bt.t0, true)}, and how many have more than 10% of their balance over 90 days late in ${mLabel(t, true)}. Dummy data: real hit rates will be lower; run this on real data to set the thresholds.` : "Pick an as-of month from May 2025 onward."}`)}</h3>
+        <div class="body">${bt ? `<div class="tbl-wrap"><table><thead><tr><th>Rule in ${mLabel(bt.t0)}</th><th class="r">Dealers flagged</th><th class="r">Now 90+ over 10%</th><th class="r">Hit rate${help("Share of flagged dealers that now have more than 10% of their balance over 90 days past due.")}</th></tr></thead><tbody>
+          ${[...bt.rows, bt.base].map(r => `<tr><td>${r.name}</td><td class="r">${r.n}</td><td class="r">${r.bad}</td><td class="r">${r.rate == null ? "–" : pct(r.rate)}</td></tr>`).join("")}
+          </tbody></table></div><p class="note" style="margin-top:16px">Dummy data: real hit rates will be lower.</p>` : ""}</div>
+      </div>
+      ${card({ title: `${pl(nLim, "dealer uses", "dealers use")} more than 90% of their credit limit`, sub: `Balance divided by credit limit, ${mLabel(t, true)}, top 15. Amber above 90%, red above 100%. Click a dealer to open it.`, id: "c-use" })}
+    </div>
+    <div class="card"><h3>The three rules and their thresholds</h3>
+      <div class="body"><div class="def">
+        <div>Overdue rising</div><div>Overdue went up at each of the last 3 month-ends, by at least 5% each time, and is at least ₺250k now. The 5% step and the ₺250k floor keep small, noisy balances out.</div>
+        <div>Limit over 90%</div><div>Balance is more than 90% of the credit limit at month-end. Above 100% the marker turns red.</div>
+        <div>90+ over 10%</div><div>More than 10% of the dealer's balance is over 90 days past due.</div>
+        <div>Status</div><div>Act: two or more flags. Watch: one flag. OK: none.</div>
+      </div></div></div>
+  </section>`;
+  const draw = () => {
+    flagHist(document.getElementById("c-hist"), { data: hist, hi: t });
+    useRank(document.getElementById("c-use"), {
+      rows: top.map(([i, u]) => { const d = D.dealers[i]; return { i, v: u, label: `${d.dealer_name.split(" ")[0]} · ${d.city}`, tip: `${d.dealer_name}, ${d.city}\nBalance ${fmtM(out(i, t))} of ${fmtM(g("credit_limit", i, t))} limit\nUse ${pct(u, 1)}` }; }),
+      onClick: goDealer,
+    });
+  };
+  draw(); return draw;
+}
+
+// ======================= EXPOSURE =======================
+const collAt = (i, E) => D.collateral[i].filter(c => c[2] <= E && (c[3] == null || c[3] >= E));
+function pageExposure() {
+  const I = ids(), t = st.t, E = D.monthEnds[t], a = agg(I, t), p = t > 0 ? agg(I, t - 1) : null;
+  const series = Array.from({ length: M }, (_, k) => agg(I, k));
+  const types = {};
+  for (const i of I) for (const c of collAt(i, E)) types[c[0]] = (types[c[0]] || 0) + c[1];
+  const typeRows = Object.entries(types).sort((x, y) => y[1] - x[1]), collTot = typeRows.reduce((s, x) => s + x[1], 0);
+  const expiring = I.flatMap(i => collAt(i, E).filter(c => c[0] === "Bank guarantee letter" && c[3] != null && c[3] - E <= TH.expiry).map(c => ({ i, amt: c[1], to: c[3] }))).sort((x, y) => x.to - y.to);
+  const expTot = expiring.reduce((s, x) => s + x.amt, 0);
+  const rank = I.map(i => ({ i, u: unsec(i, t) })).filter(x => x.u > 0).sort((x, y) => y.u - x.u).slice(0, 15);
+  const rankShare = a.unsec ? rank.reduce((s, x) => s + x.u, 0) / a.unsec : 0;
+  const prevLbl = t ? mLabel(t - 1) : null;
+  const typeName = { "Bank guarantee letter": "Bank guarantee letters", "DBS bank limit": "DBS bank limits", "Mortgage": "Mortgages" };
+
+  main.innerHTML = `<section class="page">
+    ${phead("How much of the receivables could we actually lose?",
+      "collateral is what Arçelik can call on if a dealer does not pay: bank guarantee letters, DBS bank limits and mortgages. The part of a balance above its collateral is the real exposure.")}
+    <div class="kpis k4" id="t-exposure">
+      ${kpi({ k: "Covered by collateral", h: "Share of receivables backed by collateral in force. Collateral above a dealer's balance does not count.", v: pct(a.out ? a.sec / a.out : 0), d: `${fmtM(a.sec)} of ${fmtM(a.out)} · ${delta(a.out ? a.sec / a.out : 0, p && p.out ? p.sec / p.out : null, { kind: "pp", bad: -1, vs: prevLbl })}` })}
+      ${kpi({ k: "Balance not covered", h: "Receivables above collateral, added up dealer by dealer.", v: fmtM(a.unsec), d: `Receivables above collateral · ${delta(a.unsec, p?.unsec, { vs: prevLbl })}` })}
+      ${kpi({ k: "Overdue not covered", h: "Overdue above collateral, assuming collateral is used against overdue first.", v: fmtM(a.unsecOd), d: `Overdue above collateral · ${delta(a.unsecOd, p?.unsecOd, { vs: prevLbl })}` })}
+      ${kpi({ k: "Guarantees expiring in 90 days", h: "Bank guarantee letters in force that end within 90 days of the as-of month-end.", v: fmtM(expTot), d: `${expiring.length} bank guarantee letter${expiring.length === 1 ? "" : "s"} to renew` })}
+    </div>
+    <div class="grid2">
+      ${card({ title: rank.length ? `${pl(rank.length, "dealer holds", "dealers hold")} ${pct(rankShare)} of the balance not covered by collateral` : "Every balance is covered by collateral", sub: `Balance per dealer, ${mLabel(t, true)}: grey is covered by collateral, red is not. Click a dealer to open it.`, id: "c-unsec",
+        extra: legend([["", "Covered by collateral", "--secured"], ["", "Not covered", "--crit"]]) })}
+      <div style="display:grid;gap:24px;align-content:start;min-width:0">
+        ${card({ title: typeRows.length ? `${typeName[typeRows[0][0]] || typeRows[0][0]} make up ${pct(typeRows[0][1] / collTot)} of collateral` : "No collateral in this selection", sub: `Collateral in force at ${mLabel(t, true)}, by type.`, id: "c-types" })}
+        ${card({ title: `Credit control held back ${fmtM(a.blocked)} of orders in ${mLabel(t, true)}`, sub: "Orders not delivered because the dealer was at or over its credit limit: the sales cost of credit risk.", id: "c-blocked" })}
+      </div>
+    </div>
+    <div class="card"><h3>${expiring.length ? `${pl(expiring.length, "guarantee letter", "guarantee letters")} worth ${fmtM(expTot)} expire${expiring.length === 1 ? "s" : ""} within 90 days` : "No guarantee letter expires within 90 days"}${help(`Bank guarantee letters in force at ${mLabel(t, true)} that end within 90 days. Ask for renewal before the end date, starting with flagged dealers.`)}</h3>
+      <div class="body">${expiring.length ? `<div class="tbl-wrap"><table><thead><tr><th>Dealer</th><th>Region</th><th class="r">Amount</th><th>Ends</th><th class="r">Days left</th><th class="r">Balance</th><th>Status</th></tr></thead><tbody>
+        ${expiring.map(x => { const d = D.dealers[x.i]; return `<tr class="go" data-i="${x.i}" tabindex="0"><td>${esc(d.dealer_name)}<div class="meta">${esc(d.city)}</div></td><td>${esc(d.region)}</td><td class="r">${fmtM(x.amt)}</td><td>${dayStr(x.to)}</td><td class="r">${x.to - E}</td><td class="r">${fmtM(out(x.i, t))}</td><td>${pill(FL[x.i][t].sev)}</td></tr>`; }).join("")}
+      </tbody></table></div>` : ""}</div></div>
+  </section>`;
+  bindRows();
+  const draw = () => {
+    hStack(document.getElementById("c-unsec"), {
+      keys: [["s", "Covered", "--secured"], ["u", "Not covered", "--crit"]],
+      rows: rank.map(x => { const d = D.dealers[x.i], o = out(x.i, t); return { key: x.i, label: `${d.dealer_name.split(" ")[0]} · ${d.city}`, vals: [o - x.u, x.u], end: fmtM(x.u),
+        tip: `${d.dealer_name}, ${d.city}\nBalance ${fmtM(o)}\nCollateral ${fmtM(g("collateral", x.i, t))}\nNot covered ${fmtM(x.u)}` }; }),
+      onClick: k => goDealer(+k),
+    });
+    hStack(document.getElementById("c-types"), {
+      keys: [["v", "Collateral", "--s1"]], lw: 170,
+      rows: typeRows.map(([ty, v]) => ({ key: ty, label: ty, vals: [v], end: `${fmtM(v)} · ${pct(v / collTot)}`, tip: `${ty}\n${fmtM(v)} in force (${pct(v / collTot, 1)})` })),
+    });
+    stackCols(document.getElementById("c-blocked"), {
+      cols: series.map(s => ({ vals: [s.blocked] })), keys: [["b", "Orders blocked", "--b2"]], hi: t, h: 200,
+      tipFn: k => `${mLabel(k, true)}\nOrders blocked ${fmtM(series[k].blocked)}`, onClick: setMonth,
+    });
+  };
+  draw(); return draw;
+}
+
+// ======================= DEALERS TABLE =======================
+function pageDealers() {
+  const I = ids(), t = st.t;
+  const rows = I.map(i => {
+    const d = D.dealers[i], f = FL[i][t], ac = act(i);
+    return { i, d, f, sev: f.sev * 1e13 + od(i, t), name: d.dealer_name, region: d.region, out: out(i, t), use: use(i, t), od: od(i, t),
+      odPct: out(i, t) ? od(i, t) / out(i, t) : 0, b0: g("od_0_30", i, t), b1: g("od_31_60", i, t), b2: g("od_61_90", i, t), b3: g("od_90p", i, t),
+      late: lateDays(i, t), unsec: unsec(i, t), owner: ac ? ac.owner : "" };
+  });
+  const q = st.q.trim().toLocaleLowerCase("tr");
+  const CH = { all: () => true, flagged: r => r.f.any, rising: r => r.f.rising, limit: r => r.f.limit, aged: r => r.f.aged };
+  const shown = rows.filter(r => CH[st.chip](r) && (!q || `${r.d.dealer_name} ${r.d.city} ${r.d.dealer_id} ${r.d.region} ${r.owner}`.toLocaleLowerCase("tr").includes(q)))
+    .sort((x, y) => { const a = x[st.sort.k], b = y[st.sort.k]; return (typeof a === "string" ? a.localeCompare(b, "tr") : a - b) * st.sort.dir; });
+  const cols = [["name", "Dealer"], ["region", "Region"], ["out", "Balance", "r"], ["use", "Limit use", "", "Balance ÷ credit limit. Amber above 90%, red above 100%."], ["od", "Overdue", "r"], ["odPct", "Overdue %", "r", "Overdue ÷ balance."],
+    ["b0", "0–30", "r", "Overdue split by days past due: 0–30, 31–60, 61–90 and 90+."], ["b1", "31–60", "r"], ["b2", "61–90", "r"], ["b3", "90+", "r"], ["late", "Days late", "r", "Days paid late: overdue ÷ last 3 months' sales × days. 0 means the dealer pays on time."], ["unsec", "Not covered", "r", "Balance above the collateral in force."], ["owner", "Owner"], ["sev", "Status", "", "Act: two or more warning rules tripped. Watch: one."]];
+  main.innerHTML = `<section class="page">
+    ${phead("Every dealer at a glance",
+      `one row per dealer for ${esc(scope())} at ${mLabel(t, true)}. Search by name, city, region or owner. Click a column header to sort and a row to open the dealer.`)}
+    <div class="toolbar">
+      <input class="search" id="q" type="search" placeholder="Search dealers" value="${esc(st.q)}" aria-label="Search dealers">
+      <div class="seg" role="group" aria-label="Flag filter">${[["all", "All"], ["flagged", "Any flag"], ["rising", "Overdue rising"], ["limit", "Limit over 90%"], ["aged", "90+ over 10%"]]
+        .map(([k, l]) => `<button type="button" data-chip="${k}" aria-pressed="${st.chip === k}">${l} (${rows.filter(CH[k]).length})</button>`).join("")}</div>
+    </div>
+    <div class="tbl-wrap boxed" id="t-dealers"><table><thead><tr>${cols.map(([k, l, c, hp]) => `<th class="s ${c || ""}" data-k="${k}" ${st.sort.k === k ? `data-dir="${st.sort.dir}"` : ""}>${l}${hp ? help(hp) : ""}</th>`).join("")}</tr></thead>
+    <tbody>${shown.map(r => `<tr class="go" data-i="${r.i}" tabindex="0">
+      <td>${esc(r.name)}<div class="meta">${r.d.dealer_id} · ${esc(r.d.city)} · ${r.d.brand} · tier ${r.d.tier}</div></td>
+      <td>${esc(r.region)}</td><td class="r">${fmtM(r.out)}</td><td>${useBar(r.use)}</td><td class="r">${zero(r.od)}</td><td class="r">${pct(r.odPct)}</td>
+      <td class="r">${zero(r.b0)}</td><td class="r">${zero(r.b1)}</td><td class="r">${zero(r.b2)}</td><td class="r">${zero(r.b3)}</td>
+      <td class="r">${Math.round(r.late)}</td><td class="r">${zero(r.unsec)}</td><td>${r.owner ? esc(r.owner) : `<span class="zero">–</span>`}</td>
+      <td><div class="statuscell">${pill(r.f.sev)}${chips(r.f, r.use)}</div></td></tr>`).join("") || `<tr><td colspan="${cols.length}" class="count" style="padding:28px">No dealers match. Clear the search or pick another flag filter.</td></tr>`}</tbody></table></div>
+    <p class="count">${shown.length} of ${rows.length} dealers shown</p>
+  </section>`;
+  const qEl = document.getElementById("q");
+  qEl.oninput = () => { st.q = qEl.value; const pos = qEl.selectionStart; render(); const n = document.getElementById("q"); n.focus(); n.setSelectionRange(pos, pos); };
+  main.querySelectorAll("[data-chip]").forEach(b => b.onclick = () => { st.chip = b.dataset.chip; render(); });
+  main.querySelectorAll("th.s").forEach(th => th.onclick = () => { const k = th.dataset.k; st.sort = st.sort.k === k ? { k, dir: -st.sort.dir } : { k, dir: ["name", "region", "owner"].includes(k) ? 1 : -1 }; render(); });
+  bindRows();
+}
+
+// ======================= DEALER DETAIL =======================
+function pageDealer() {
+  const t = st.t;
+  if (st.dealer == null) { const I = ids(); st.dealer = (I.length ? I : D.dealers.map((_, k) => k)).map(i => [i, FL[i][t].sev * 1e13 + od(i, t)]).sort((x, y) => y[1] - x[1])[0][0]; }
+  const i = st.dealer, d = D.dealers[i], f = FL[i][t], E = D.monthEnds[t], u = use(i, t), ac = act(i);
+  const od4 = [3, 2, 1, 0].map(k => t - k >= 0 ? od(i, t - k) : null);
+  const open = D.invoices[i].map(([no, id, due, amt, pays]) => {
+    if (id > E) return null;
+    const o = amt - pays.filter(p2 => p2[0] <= E).reduce((s, p2) => s + p2[1], 0);
+    return o >= 1 ? { no, id, due, amt, o, dpd: E - due } : null;
+  }).filter(Boolean).sort((x, y) => y.dpd - x.dpd);
+  const bucketOf = v => v <= 0 ? "Not yet due" : v <= 30 ? "0–30 days" : v <= 60 ? "31–60 days" : v <= 90 ? "61–90 days" : "90+ days";
+  const coll = collAt(i, E), collSum = coll.reduce((s, c) => s + c[1], 0);
+  const share90 = out(i, t) ? g("od_90p", i, t) / out(i, t) : 0;
+  const why = [
+    [f.rising, true, `Overdue rose at each of the last 3 month-ends: ${od4.map(v => v == null ? "–" : fmtM(v)).join(" → ")}.`, `Overdue has not risen 3 months in a row (${od4.filter(v => v != null).map(v => fmtM(v)).join(" → ")}).`],
+    [f.limit, u > 1, `Credit-limit use is ${pct(u)}: a balance of ${fmtM(out(i, t))} against a ${fmtM(g("credit_limit", i, t))} limit${u > 1 ? ", over the limit" : ""}.`, `Credit-limit use is ${pct(u)}, under the 90% threshold.`],
+    [f.aged, false, `${pct(share90)} of the balance (${fmtM(g("od_90p", i, t))}) is over 90 days past due.`, `${pct(share90)} of the balance is over 90 days past due, under 10%.`],
+  ];
+  const others = D.dealers.map((x, k) => [k, x]).sort((x, y) => x[1].dealer_name.localeCompare(y[1].dealer_name, "tr"));
+  const keys = [["not_due", "Not yet due", "--notdue"], ...BK.map(b => [b.f, b.label, b.col])], span = Array.from({ length: M }, (_, k) => k);
+  const p = t > 0 ? t - 1 : null;
+  main.innerHTML = `<section class="page">
+    ${phead("Why is this dealer flagged, and what is being done?",
+      `one dealer as of ${mLabel(t, true)}. Bars show what the dealer owed at each month-end, split by days past due; the dark line is its credit limit.`)}
+    <div class="dhead">
+      <div style="display:grid;gap:8px;min-width:0">
+        <button class="linkbtn" data-nav="dealers" type="button" style="justify-self:start;padding:0">Back to all dealers</button>
+        <h2>${esc(d.dealer_name)} ${pill(f.sev)}</h2>
+        <div class="facts"><span>${d.dealer_id}</span><span>${esc(d.city)}, ${esc(d.region)}</span><span>${d.brand}</span><span>Tier ${d.tier}</span><span>${d.payment_terms_days}-day terms</span></div>
+      </div>
+      <div class="f"><label for="d-pick">Open another dealer</label><select id="d-pick">${others.map(([k, x]) => `<option value="${k}" ${k === i ? "selected" : ""}>${esc(x.dealer_name)} · ${esc(x.city)}</option>`).join("")}</select></div>
+    </div>
+    <div class="kpis k4">
+      ${kpi({ k: "Balance", v: fmtM(out(i, t)), d: p != null ? delta(out(i, t), out(i, p), { bad: 0, vs: mLabel(p) }) : "" })}
+      ${kpi({ k: "Overdue", v: fmtM(od(i, t)), d: `${pct(out(i, t) ? od(i, t) / out(i, t) : 0, 1)} of balance` })}
+      ${kpi({ k: "Credit-limit use", h: "Balance ÷ credit limit in force. Above 90% trips a warning rule.", v: pct(u), d: `Limit ${fmtM(g("credit_limit", i, t))}` })}
+      ${kpi({ k: "Days paid late", h: "DSO minus days on terms: how many days late this dealer pays on average.", v: `${Math.round(lateDays(i, t))} <small>days</small>`, d: `DSO ${Math.round(dso(i, t))} on ${d.payment_terms_days}-day terms` })}
+    </div>
+    <div class="grid2">
+      <div class="card"><h3>${f.n ? `${f.n} warning rule${f.n > 1 ? "s" : ""} tripped` : "No warning rule tripped"}</h3>
+        <div class="body"><ul class="flaglist">${why.map(([on, crit, yes, no]) => `<li class="${on ? (crit ? "c" : "") : "ok"}">${on ? yes : no}</li>`).join("")}</ul></div></div>
+      <div class="card"><h3>${!logOn() ? "Collection action" : ac ? esc(ac.step) : "No open collection action"}${help(`Collections log, ${mLabel(actionAsOf, true)}.`)}</h3>
+        <div class="body">${ac ? `<div class="def">
+          <div>Owner</div><div>${esc(ac.owner)}</div><div>Status</div><div>${esc(ac.status)}</div><div>Last contact</div><div>${dayStr(ac.contact)}</div>
+          <div>Promise to pay</div><div>${ac.ptp ? `${fmtM(ac.ptpAmt)} by ${dayStr(ac.ptp)}` : "None"}</div></div>` : !logOn() ? `<p class="note">The collections log covers ${mLabel(actionAsOf, true)} only. Select that month to see owner, next step and promise to pay.</p>` : `<p class="note">The dealer is not flagged in ${mLabel(actionAsOf, true)}, so it has no entry in the log.</p>`}</div></div>
+    </div>
+    <div class="grid2">
+      ${card({ title: "Balance by aging bucket against the credit limit", sub: "Month-end balance split by days past due. Click a bar to change the as-of month.", id: "c-d-bal",
+        extra: legend(keys, `<span><i class="ln" style="background:var(--ink)"></i>Credit limit</span>`) })}
+      ${card({ title: `DSO against ${d.payment_terms_days}-day terms`, sub: "Days sales outstanding by month. The dashed line is the agreed payment term.", id: "c-d-dso" })}
+    </div>
+    <div class="grid2">
+      <div class="card"><h3>${collSum ? `Collateral covers ${pct(Math.min(1, out(i, t) ? collSum / out(i, t) : 0))} of the balance; ${fmtM(unsec(i, t))} is not covered` : "No collateral in force"}${help(`Collateral in force at ${mLabel(t, true)}: bank guarantee letters, DBS bank limits and mortgages.`)}</h3>
+        <div class="body">${coll.length ? `<div class="tbl-wrap"><table><thead><tr><th>Type</th><th class="r">Amount</th><th>Valid until</th></tr></thead><tbody>
+          ${coll.map(c => `<tr><td>${c[0]}</td><td class="r">${fmtM(c[1])}</td><td>${c[3] == null ? "Open-ended" : dayStr(c[3])}</td></tr>`).join("")}</tbody></table></div>` : ""}</div></div>
+      <div class="card"><h3>${open.filter(o => o.dpd > 0).length} of ${open.length} open invoices are past due${help(`Invoices with an unpaid balance at ${mLabel(t, true)}, most overdue first.`)}</h3>
+        <div class="body"><div class="tbl-wrap" style="max-height:360px;overflow:auto"><table><thead><tr><th>Invoice</th><th>Due</th><th class="r">Days past due</th><th>Bucket</th><th class="r">Open</th></tr></thead><tbody>
+          ${open.map(o => `<tr><td>INV${o.no}<div class="meta">${dayStr(o.id)}</div></td><td>${dayStr(o.due)}</td><td class="r">${o.dpd > 0 ? o.dpd : `<span class="zero">–</span>`}</td><td>${bucketOf(o.dpd)}</td><td class="r">${fmtM(o.o)}</td></tr>`).join("")}
+        </tbody></table></div></div></div>
+    </div>
+  </section>`;
+  document.getElementById("d-pick").onchange = e => goDealer(+e.target.value);
+  const draw = () => {
+    stackCols(document.getElementById("c-d-bal"), {
+      cols: span.map(k => ({ vals: keys.map(x => g(x[0], i, k)) })), keys, hi: t, line: span.map(k => g("credit_limit", i, k)),
+      tipFn: k => `${mLabel(k, true)} · balance ${fmtM(out(i, k))}\nLimit ${fmtM(g("credit_limit", i, k))} (${pct(use(i, k))} used)\n${keys.map(x => `${x[1]}: ${fmtM(g(x[0], i, k))}`).reverse().join("\n")}`,
+      onClick: setMonth,
+    });
+    lines(document.getElementById("c-d-dso"), {
+      series: [{ name: "DSO", col: "--s1", vals: span.map(k => dso(i, k)), fill: true }], ref: d.payment_terms_days, refLabel: `Terms ${d.payment_terms_days} days`, hi: t, fmt: v => `${Math.round(v)}`,
+      tipFn: k => `${mLabel(k, true)}\nDSO ${Math.round(dso(i, k))} days\nDays paid late ${Math.round(lateDays(i, k))}`,
+    });
+  };
+  draw(); return draw;
+}
+
+// ======================= GUIDE =======================
+function pageGuide() {
+  const steps = [
+    ["overview", "Read the three key messages", "They state the health of receivables, what changed and how many dealers need action.", "30 sec"],
+    ["overview", "Scan the six headline measures", "Overdue share, days paid late, 90+ share, balance not covered by collateral, dealers flagged and orders blocked. A red arrow means the measure got worse since last month.", "1 min"],
+    ["overview", "Check the action list", "The ten dealers to call first, with owner, next step and any promise to pay.", "1 min"],
+    ["drivers", "Open Drivers to see why", "Which regions and dealers moved overdue, how concentrated it is, and whether DSO rose from late payment or longer terms.", "1 min"],
+    ["flags", "Open Flags to see how the warnings work", "New and cleared flags each month, and a back-test of whether the rules picked the right dealers.", "30 sec"],
+    ["exposure", "Open Exposure to see what is at risk", "How much is covered by guarantees and mortgages, which dealers carry uncovered debt and which guarantees expire soon.", "30 sec"],
+    ["dealers", "Find any dealer", "Search the full list, or click a dealer anywhere on the dashboard to see its history, collateral and open invoices.", "30 sec"],
+  ];
+  main.innerHTML = `<section class="page">
+    ${phead("Appendix: reading guide, definitions and data",
+      "follow the steps in order. The filter bar at the top applies to every page; the as-of month moves every figure to that month-end.")}
+    <div class="card"><h3>Read the dashboard in five minutes</h3><div class="body"><p style="margin-bottom:12px"><button class="tbtn" type="button" data-tour>Take the one-minute tour</button></p><ol class="steps">${steps.map(([pg, t1, x, tm]) => `<li><div><div class="t">${t1}</div><div class="x">${x}</div></div><button class="linkbtn" data-nav="${pg}" type="button">${tm} · open</button></li>`).join("")}</ol></div></div>
+    <div class="card"><h3>What the brief asked for, and what was added</h3><div class="body"><div class="def">
+      <div>Asked in the brief</div><div>Overdue by aging bucket by region and dealer, DSO trend by month, credit-limit use per dealer, and two flags: overdue rising 3 months in a row, limit use above 90%. Covered on Overview, Dealers and Dealer detail.</div>
+      <div>Added beyond the brief</div><div>A third flag (90+ over 10% of balance), the Drivers analysis, the flag back-test, collateral and exposure, orders blocked, and the collections log. These use extra dummy tables: collateral and actions.</div>
+    </div></div></div>
+    <div class="card"><h3>Words used on this dashboard</h3><div class="body"><div class="def">
+      <div>Receivables (balance)</div><div>What dealers owe at month-end: invoice amounts minus payments received up to that day.</div>
+      <div>Overdue</div><div>The part of receivables past its due date. The due date is the invoice date plus the dealer's payment terms (60, 90 or 120 days).</div>
+      <div>Aging bucket</div><div>Overdue split by how many days past due it is: 0–30, 31–60, 61–90 and 90+.</div>
+      <div>DSO</div><div>Days sales outstanding: receivables ÷ invoiced sales of the last 3 months × days in those months.</div>
+      <div>Days on terms</div><div>The DSO a dealer would have if it paid exactly on time (best possible DSO): not-yet-due balance ÷ sales × days.</div>
+      <div>Days paid late</div><div>DSO minus days on terms. It measures payment behaviour on its own, separate from the terms Arçelik agreed.</div>
+      <div>Still unpaid a month later</div><div>Roll rate: of last month's balance in a bucket, the share not yet paid this month.</div>
+      <div>Credit-limit use</div><div>Receivables ÷ the credit limit in force at month-end.</div>
+      <div>Collateral</div><div>Bank guarantee letters (teminat mektubu), DBS bank limits and mortgages in force at month-end.</div>
+      <div>Not covered</div><div>Balance above collateral. For overdue: overdue above collateral.</div>
+      <div>Orders blocked</div><div>Order value held back because the dealer was at or over its credit limit.</div>
+      <div>Act and Watch</div><div>Act: two or more warning rules tripped. Watch: one. The Flags page lists the rules.</div>
+    </div></div></div>
+    <div class="grid2">
+      <div class="card"><h3>Data behind the dashboard${help(`All data is invented for this exercise. The files are in the data folder.`)}</h3><div class="body"><div class="def">
+        <div><code>dealers</code></div><div>140 dealers: region, city, brand, tier, payment terms</div>
+        <div><code>invoices</code></div><div>About 24,000 invoices, May 2024 to Oct 2026</div>
+        <div><code>payments</code></div><div>About 26,000 payments by DBS, cheque or bank transfer</div>
+        <div><code>credit_limits</code></div><div>Limits reviewed every January and July</div>
+        <div><code>collateral</code></div><div>Guarantee letters, DBS limits and mortgages with validity dates</div>
+        <div><code>actions</code></div><div>Collections log for flagged dealers, Oct 2026</div>
+        <div><code>dealer_month</code></div><div>Month-end snapshot per dealer, built from the tables above</div>
+      </div></div></div>
+      <div class="card"><h3>Assumptions</h3><div class="body"><div class="def">
+        <div>Network</div><div>140 dealers in Turkey's 7 regions, selling Arçelik or Beko.</div>
+        <div>Sales</div><div>Grow about 2.2% a month in TRY (inflation), with peaks in summer and November.</div>
+        <div>Payment behaviour</div><div>Each dealer is on time, slow, improving, deteriorating from some month in 2026, or distressed.</div>
+        <div>Limits</div><div>Last 3 months' sales × terms × headroom, frozen for dealers in trouble.</div>
+        <div>Credit control</div><div>Orders are cut above 95% of the limit and almost stopped above 105%.</div>
+        <div>Collateral</div><div>Guarantee letters run 12 months and are not renewed for dealers in trouble.</div>
+      </div></div></div>
+    </div>
+  </section>`;
+}
+
+// ---------- theme toggle ----------
+const root = document.documentElement, darkMq = matchMedia("(prefers-color-scheme: dark)");
+const effTheme = () => root.dataset.theme || (darkMq.matches ? "dark" : "light");
+const syncTheme = () => document.querySelectorAll("[data-theme-set]").forEach(b => b.setAttribute("aria-pressed", b.dataset.themeSet === effTheme()));
+try { const saved = localStorage.getItem("drw-theme"); if (saved) root.dataset.theme = saved; } catch (e) {}
+document.querySelectorAll("[data-theme-set]").forEach(b => b.onclick = () => {
+  root.dataset.theme = b.dataset.themeSet;
+  try { localStorage.setItem("drw-theme", b.dataset.themeSet); } catch (e) {}
+  syncTheme();
+});
+darkMq.addEventListener("change", syncTheme);
+new MutationObserver(syncTheme).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
+syncTheme();
+
+// ---------- router ----------
+const PAGES = { overview: pageOverview, drivers: pageDrivers, flags: pageFlags, exposure: pageExposure, dealers: pageDealers, dealer: pageDealer, guide: pageGuide };
+let redraw = null;
+function render() {
+  document.querySelectorAll("nav.tabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.page === st.page));
+  const hash = st.page === "dealer" && st.dealer != null ? `dealer-${D.dealers[st.dealer].dealer_id}` : st.page;
+  if (location.hash.slice(1) !== hash) history.replaceState(null, "", "#" + hash);
+  redraw = PAGES[st.page]() || null;
+  main.querySelectorAll("[data-tour]").forEach(el => el.addEventListener("click", startTour));
+  main.querySelectorAll("[data-nav]").forEach(el => el.addEventListener("click", e => { e.preventDefault(); goPage(el.dataset.nav, el.dataset.chip ? { chip: el.dataset.chip } : {}); }));
+}
+document.querySelectorAll("nav.tabs button").forEach(b => b.onclick = () => { st.page = b.dataset.page; render(); });
+// ---------- guided tour ----------
+const TOUR = [
+  { page: "overview", sel: "#t-messages", title: "Start with the key messages", text: "Three sentences: how healthy receivables are, what changed in the last three months, and how many dealers need action." },
+  { page: "overview", sel: "#t-kpis", title: "Six headline measures", text: "Arrows compare with last month: red is worse, green is better. The small line under each number shows the last 12 months." },
+  { page: "overview", sel: "#t-kpis .help", title: "Explanations sit behind the ?", text: "Hover over or tap any ? to see how a number is calculated. You will find one next to every title and measure." },
+  { page: "overview", sel: "#t-actions", title: "Who to call first", text: "Flagged dealers ranked by urgency, with owner, next step and any promise to pay. Click a row to open that dealer." },
+  { page: "overview", sel: ".filters", top: true, title: "Filters apply everywhere", text: "Change the month, region, brand, tier or payment terms. Every page and every number follows." },
+  { page: "drivers", sel: "#t-drivers", title: "Drivers: why overdue moved", text: "Which regions and dealers added to overdue, how concentrated it is, and whether it comes from late payment or longer terms. Pick the comparison month above the charts." },
+  { page: "flags", sel: "#t-flags", title: "Flags: do the warning rules work?", text: "How many dealers trip the three rules each month. Further down, a back-test shows what happened to dealers flagged six months earlier." },
+  { page: "exposure", sel: "#t-exposure", title: "Exposure: what could be lost", text: "How much is covered by guarantees, DBS limits and mortgages, which dealers carry uncovered debt, and which guarantees expire soon." },
+  { page: "dealers", sel: "#t-dealers", title: "Every dealer in one table", text: "Search, sort by any column and filter by flag. Click a row for the dealer's history, collateral and open invoices." },
+  { page: null, sel: "#tab-guide", top: true, title: "The Appendix", text: "Reading guide, definitions, data and assumptions. You can restart this tour from there at any time." },
+];
+const tourEl = document.getElementById("tour"), spot = document.getElementById("tour-spot"), block = document.getElementById("tour-block");
+let tourStep = -1, tourSteps = TOUR;
+function placeTour() {
+  if (tourStep < 0) return;
+  const el = document.querySelector(tourSteps[tourStep].sel); if (!el) return;
+  const r = el.getBoundingClientRect(), pad = 8, vh = innerHeight, vw = innerWidth;
+  const top = Math.max(4, r.top - pad), bottom = Math.min(vh - 4, r.bottom + pad), left = Math.max(4, r.left - pad), right = Math.min(vw - 4, r.right + pad);
+  Object.assign(spot.style, { top: top + "px", left: left + "px", width: Math.max(0, right - left) + "px", height: Math.max(0, bottom - top) + "px" });
+  const ph = tourEl.offsetHeight, pw = tourEl.offsetWidth;
+  const y = bottom + 12 + ph <= vh - 8 ? bottom + 12 : top - 12 - ph >= 8 ? top - 12 - ph : vh - ph - 16;
+  tourEl.style.top = y + "px"; tourEl.style.left = Math.min(Math.max(8, left), vw - pw - 8) + "px";
+}
+function showStep(k) {
+  tourStep = k;
+  const stp = tourSteps[k];
+  if (stp.page && st.page !== stp.page) { st.page = stp.page; render(); }
+  const el = document.querySelector(stp.sel);
+  if (!el) { if (k + 1 < tourSteps.length) return showStep(k + 1); return endTour(); }
+  const filtersH = document.querySelector(".filters").offsetHeight;
+  scrollTo({ top: stp.top ? 0 : Math.max(0, scrollY + el.getBoundingClientRect().top - filtersH - 24), behavior: "instant" });
+  document.getElementById("tour-count").textContent = `Step ${k + 1} of ${tourSteps.length}`;
+  document.getElementById("tour-title").textContent = stp.title;
+  document.getElementById("tour-text").textContent = stp.text;
+  document.getElementById("tour-back").hidden = k === 0;
+  document.getElementById("tour-next").textContent = k === tourSteps.length - 1 ? "Finish" : "Next";
+  tourEl.hidden = spot.hidden = block.hidden = false;
+  placeTour();
+  document.getElementById("tour-next").focus({ preventScroll: true });
+}
+function startTour() {
+  unpin();
+  showStep(0);
+}
+function endTour() {
+  tourStep = -1; tourEl.hidden = spot.hidden = block.hidden = true;
+  try { localStorage.setItem("drw-tour", "1"); } catch (e) {}
+  if (st.page !== "overview") goPage("overview"); else scrollTo({ top: 0 });
+}
+document.getElementById("tour-next").onclick = () => tourStep + 1 < tourSteps.length ? showStep(tourStep + 1) : endTour();
+document.getElementById("tour-back").onclick = () => tourStep > 0 && showStep(tourStep - 1);
+document.getElementById("tour-skip").onclick = endTour;
+document.addEventListener("keydown", e => {
+  if (tourStep < 0) return;
+  if (e.key === "Escape") endTour();
+  else if (e.key === "ArrowRight") document.getElementById("tour-next").click();
+  else if (e.key === "ArrowLeft") document.getElementById("tour-back").click();
+});
+addEventListener("resize", placeTour);
+addEventListener("scroll", placeTour, { passive: true });
+window.drwTour = { start: startTour, step: () => tourStep, next: () => document.getElementById("tour-next").click(), steps: TOUR.length };
+
+const h0 = location.hash.slice(1);
+if (h0.startsWith("dealer-")) { const k = D.dealers.findIndex(d => d.dealer_id === h0.slice(7)); if (k >= 0) { st.page = "dealer"; st.dealer = k; } }
+else if (PAGES[h0]) st.page = h0;
+const wantTour = h0 === "tour";      // a link ending in #tour opens the dashboard straight into the tour
+let rt; new ResizeObserver(() => { clearTimeout(rt); rt = setTimeout(() => redraw && redraw(), 120); }).observe(main);
+render();
+if (wantTour) startTour();
+})();
+</script>

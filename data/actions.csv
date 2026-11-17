@@ -1,0 +1,36 @@
+dealer_id,owner,next_step,status,last_contact,promise_to_pay_date,promise_to_pay_try
+D001,Burak Oral,Legal follow-up,Escalated,2026-10-27,,
+D004,Mehmet Yalçın,Legal follow-up,Escalated,2026-10-07,,
+D007,Burak Oral,Legal follow-up,Escalated,2026-10-23,,
+D011,Burak Oral,Orders blocked until payment,Escalated,2026-10-08,,
+D012,Burak Oral,Orders blocked until payment,Escalated,2026-10-06,,
+D014,Mehmet Yalçın,Ask for extra guarantee,Open,2026-10-13,,
+D016,Burak Oral,Ask for extra guarantee,Open,2026-10-21,2026-11-20,1660000.0
+D022,Burak Oral,Call dealer this week,Open,2026-10-30,,
+D023,Burak Oral,Ask for extra guarantee,Open,2026-10-23,2026-11-11,1520000.0
+D026,Mehmet Yalçın,Orders blocked until payment,Escalated,2026-10-06,,
+D029,Mehmet Yalçın,Legal follow-up,Escalated,2026-10-24,,
+D030,Mehmet Yalçın,Ask for extra guarantee,Open,2026-10-10,,
+D033,Burak Oral,Ask for extra guarantee,Open,2026-10-22,2026-11-21,13920000.0
+D034,Burak Oral,Orders blocked until payment,Escalated,2026-10-22,,
+D036,Burak Oral,Legal follow-up,Escalated,2026-10-24,,
+D038,Burak Oral,Orders blocked until payment,Escalated,2026-10-18,,
+D040,Kerem Akgül,Ask for extra guarantee,Open,2026-10-08,2026-11-25,16580000.0
+D042,Kerem Akgül,Orders blocked until payment,Escalated,2026-10-26,,
+D044,Kerem Akgül,Orders blocked until payment,Escalated,2026-10-27,,
+D047,Kerem Akgül,Legal follow-up,Escalated,2026-10-17,,
+D050,Kerem Akgül,Orders blocked until payment,Escalated,2026-10-17,,
+D058,Kerem Akgül,Call dealer this week,Open,2026-10-28,2026-11-28,6200000.0
+D078,Gizem Sezer,Call dealer this week,Open,2026-10-28,,
+D087,Onur Tunç,Call dealer this week,Open,2026-10-04,,
+D088,Onur Tunç,Call dealer this week,Open,2026-10-16,2026-11-22,24390000.0
+D094,Onur Tunç,Call dealer this week,Open,2026-10-14,,
+D095,Onur Tunç,Call dealer this week,Open,2026-10-01,2026-11-20,11010000.0
+D102,Onur Tunç,Orders blocked until payment,Escalated,2026-10-13,,
+D105,Selin Sezer,Orders blocked until payment,Escalated,2026-10-21,,
+D112,Selin Sezer,Ask for extra guarantee,Open,2026-10-14,2026-11-10,1480000.0
+D113,Selin Sezer,Ask for extra guarantee,Open,2026-10-29,,
+D114,Selin Sezer,Legal follow-up,Escalated,2026-10-22,,
+D115,Selin Sezer,Ask for extra guarantee,Open,2026-10-04,2026-11-23,750000.0
+D117,Selin Sezer,Legal follow-up,Escalated,2026-10-11,,
+D129,Deniz Sezer,Call dealer this week,Open,2026-10-03,,

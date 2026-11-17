@@ -1,0 +1,141 @@
+dealer_id,dealer_name,city,region,brand,tier,payment_terms_days
+D001,Tekin Ev Aletleri,Balıkesir,Marmara,Arçelik,A,90
+D002,Aksoy Elektronik,İstanbul,Marmara,Arçelik,B,60
+D003,Özkan Dayanıklı Tüketim,İstanbul,Marmara,Arçelik,C,60
+D004,Bulut Elektrik,İstanbul,Marmara,Arçelik,C,60
+D005,Kılıç Ev Aletleri,İstanbul,Marmara,Arçelik,A,60
+D006,Yıldız Elektronik,İstanbul,Marmara,Beko,B,120
+D007,Öztürk Elektronik,İstanbul,Marmara,Arçelik,B,90
+D008,Sarı Ev Aletleri,İstanbul,Marmara,Beko,B,90
+D009,Aksoy Ev Aletleri,İstanbul,Marmara,Beko,B,60
+D010,Avcı Elektronik,İstanbul,Marmara,Arçelik,A,90
+D011,Koç Elektrik,İstanbul,Marmara,Arçelik,A,120
+D012,Özkan Beyaz Eşya,Tekirdağ,Marmara,Arçelik,A,90
+D013,Bulut Ticaret,İstanbul,Marmara,Beko,A,90
+D014,Kurt Beyaz Eşya,İstanbul,Marmara,Beko,A,60
+D015,Uçar Ticaret,Sakarya,Marmara,Beko,A,60
+D016,Bozkurt Beyaz Eşya,Sakarya,Marmara,Beko,C,90
+D017,Ateş Elektrik,Balıkesir,Marmara,Arçelik,B,90
+D018,Işık Elektrik,İstanbul,Marmara,Arçelik,C,60
+D019,Taş Beyaz Eşya,Balıkesir,Marmara,Arçelik,B,60
+D020,Aydın Elektrik,Balıkesir,Marmara,Arçelik,C,60
+D021,Tekin Elektrik,İstanbul,Marmara,Arçelik,C,90
+D022,Kaya Elektrik,İstanbul,Marmara,Beko,B,90
+D023,Doğan Ev Aletleri,İstanbul,Marmara,Beko,C,120
+D024,Işık Ev Aletleri,Tekirdağ,Marmara,Beko,B,90
+D025,Korkmaz Ticaret,İstanbul,Marmara,Arçelik,A,60
+D026,Işık Beyaz Eşya,Balıkesir,Marmara,Beko,C,60
+D027,Polat Beyaz Eşya,İstanbul,Marmara,Arçelik,B,120
+D028,Korkmaz Dayanıklı Tüketim,İstanbul,Marmara,Beko,C,90
+D029,Karaca Ev Aletleri,Kocaeli,Marmara,Beko,B,90
+D030,Kurt Ticaret,İstanbul,Marmara,Arçelik,B,120
+D031,Özdemir Elektronik,İstanbul,Marmara,Arçelik,C,60
+D032,Aydın Ev Aletleri,Balıkesir,Marmara,Beko,B,60
+D033,Ünal Ev Aletleri,Kocaeli,Marmara,Arçelik,A,90
+D034,Karaca Ev Aletleri,İstanbul,Marmara,Beko,C,60
+D035,Sarı Beyaz Eşya,İstanbul,Marmara,Arçelik,C,90
+D036,Polat Dayanıklı Tüketim,İstanbul,Marmara,Beko,C,90
+D037,Demir Ticaret,Tekirdağ,Marmara,Beko,A,120
+D038,Tekin Beyaz Eşya,Bursa,Marmara,Arçelik,C,120
+D039,Kılıç Ticaret,İzmir,Ege,Arçelik,C,60
+D040,Taş Elektronik,İzmir,Ege,Arçelik,A,60
+D041,Çelik Elektrik,Muğla,Ege,Beko,C,60
+D042,Karaca Elektronik,İzmir,Ege,Arçelik,B,120
+D043,Şahin Ev Aletleri,İzmir,Ege,Arçelik,C,60
+D044,Doğan Elektrik,Muğla,Ege,Beko,C,90
+D045,Arslan Beyaz Eşya,Aydın,Ege,Arçelik,A,60
+D046,Bozkurt Beyaz Eşya,Muğla,Ege,Beko,C,120
+D047,Polat Elektronik,Denizli,Ege,Arçelik,B,90
+D048,Uçar Beyaz Eşya,Aydın,Ege,Beko,A,90
+D049,Yıldız Beyaz Eşya,Denizli,Ege,Arçelik,C,60
+D050,Polat Dayanıklı Tüketim,Manisa,Ege,Beko,B,90
+D051,Koç Ev Aletleri,Denizli,Ege,Beko,C,60
+D052,Arslan Elektronik,İzmir,Ege,Arçelik,C,90
+D053,Arslan Dayanıklı Tüketim,Aydın,Ege,Beko,C,60
+D054,Kılıç Ticaret,Muğla,Ege,Beko,B,90
+D055,Işık Beyaz Eşya,Muğla,Ege,Arçelik,B,60
+D056,Kara Ev Aletleri,Manisa,Ege,Arçelik,B,60
+D057,Yılmaz Elektronik,Muğla,Ege,Arçelik,B,90
+D058,Kaya Dayanıklı Tüketim,İzmir,Ege,Arçelik,B,90
+D059,Kurt Beyaz Eşya,Muğla,Ege,Arçelik,C,60
+D060,Avcı Beyaz Eşya,İzmir,Ege,Arçelik,C,90
+D061,Kılıç Dayanıklı Tüketim,Konya,İç Anadolu,Beko,C,120
+D062,Şahin Elektronik,Sivas,İç Anadolu,Beko,C,90
+D063,Aslan Elektrik,Eskişehir,İç Anadolu,Arçelik,A,120
+D064,Kurt Elektronik,Eskişehir,İç Anadolu,Arçelik,B,60
+D065,Kara Dayanıklı Tüketim,Eskişehir,İç Anadolu,Arçelik,A,90
+D066,Işık Ticaret,Konya,İç Anadolu,Arçelik,B,60
+D067,Tekin Elektronik,Kayseri,İç Anadolu,Arçelik,B,60
+D068,Güler Ev Aletleri,Ankara,İç Anadolu,Beko,B,90
+D069,Çelik Elektrik,Ankara,İç Anadolu,Beko,C,120
+D070,Kaya Elektronik,Eskişehir,İç Anadolu,Beko,B,60
+D071,Şahin Dayanıklı Tüketim,Kayseri,İç Anadolu,Beko,B,60
+D072,Arslan Ticaret,Kayseri,İç Anadolu,Arçelik,B,90
+D073,Kaya Ev Aletleri,Kayseri,İç Anadolu,Arçelik,B,90
+D074,Tekin Ticaret,Ankara,İç Anadolu,Arçelik,B,120
+D075,Güneş Dayanıklı Tüketim,Ankara,İç Anadolu,Beko,B,90
+D076,Yıldırım Beyaz Eşya,Ankara,İç Anadolu,Arçelik,B,60
+D077,Güler Dayanıklı Tüketim,Ankara,İç Anadolu,Beko,C,60
+D078,Şimşek Elektrik,Ankara,İç Anadolu,Arçelik,B,60
+D079,Yılmaz Ev Aletleri,Ankara,İç Anadolu,Beko,B,60
+D080,Tekin Ticaret,Kayseri,İç Anadolu,Beko,C,60
+D081,Şahin Elektronik,Eskişehir,İç Anadolu,Beko,B,60
+D082,Arslan Elektronik,Sivas,İç Anadolu,Beko,B,90
+D083,Kara Dayanıklı Tüketim,Adana,Akdeniz,Arçelik,B,60
+D084,Yıldız Ev Aletleri,Antalya,Akdeniz,Arçelik,B,90
+D085,Yıldırım Elektronik,Antalya,Akdeniz,Arçelik,C,60
+D086,Sarı Elektrik,Hatay,Akdeniz,Arçelik,B,90
+D087,Korkmaz Elektronik,Antalya,Akdeniz,Beko,B,90
+D088,Koç Ticaret,Antalya,Akdeniz,Arçelik,A,120
+D089,Yıldırım Elektronik,Isparta,Akdeniz,Arçelik,A,60
+D090,Çelik Ticaret,Antalya,Akdeniz,Arçelik,C,90
+D091,Aydın Beyaz Eşya,Isparta,Akdeniz,Arçelik,B,90
+D092,Kaya Elektronik,Adana,Akdeniz,Arçelik,B,120
+D093,Kara Ticaret,Hatay,Akdeniz,Arçelik,B,60
+D094,Aksoy Elektrik,Isparta,Akdeniz,Beko,A,120
+D095,Yılmaz Elektronik,Mersin,Akdeniz,Arçelik,A,120
+D096,Ünal Ticaret,Antalya,Akdeniz,Arçelik,B,120
+D097,Işık Elektronik,Adana,Akdeniz,Beko,B,120
+D098,Akın Beyaz Eşya,Antalya,Akdeniz,Beko,B,60
+D099,Turan Dayanıklı Tüketim,Antalya,Akdeniz,Arçelik,C,90
+D100,Çetin Elektrik,Hatay,Akdeniz,Arçelik,B,90
+D101,Aksoy Elektronik,Hatay,Akdeniz,Beko,C,60
+D102,Güler Elektronik,Hatay,Akdeniz,Beko,C,90
+D103,Şimşek Beyaz Eşya,Trabzon,Karadeniz,Beko,A,120
+D104,Avcı Elektronik,Zonguldak,Karadeniz,Beko,C,90
+D105,Aslan Dayanıklı Tüketim,Ordu,Karadeniz,Beko,B,90
+D106,Işık Elektrik,Ordu,Karadeniz,Arçelik,C,90
+D107,Öztürk Ev Aletleri,Ordu,Karadeniz,Arçelik,C,90
+D108,Çelik Elektronik,Rize,Karadeniz,Beko,C,90
+D109,Yıldız Elektronik,Samsun,Karadeniz,Arçelik,B,90
+D110,Ateş Elektronik,Zonguldak,Karadeniz,Arçelik,B,90
+D111,Demir Ticaret,Samsun,Karadeniz,Arçelik,A,90
+D112,Avcı Dayanıklı Tüketim,Rize,Karadeniz,Arçelik,C,90
+D113,Akın Ev Aletleri,Trabzon,Karadeniz,Beko,A,90
+D114,Işık Ticaret,Samsun,Karadeniz,Beko,B,90
+D115,Aydın Ticaret,Samsun,Karadeniz,Arçelik,B,60
+D116,Çelik Ticaret,Samsun,Karadeniz,Beko,C,90
+D117,Yıldız Beyaz Eşya,Rize,Karadeniz,Beko,C,90
+D118,Akın Dayanıklı Tüketim,Trabzon,Karadeniz,Beko,B,120
+D119,Aslan Elektrik,Erzurum,Doğu Anadolu,Beko,C,90
+D120,Sarı Dayanıklı Tüketim,Malatya,Doğu Anadolu,Arçelik,B,90
+D121,Güneş Ev Aletleri,Van,Doğu Anadolu,Beko,C,60
+D122,Uçar Ticaret,Erzurum,Doğu Anadolu,Beko,C,60
+D123,Korkmaz Ev Aletleri,Malatya,Doğu Anadolu,Beko,C,120
+D124,Akın Beyaz Eşya,Malatya,Doğu Anadolu,Arçelik,B,90
+D125,Işık Beyaz Eşya,Elazığ,Doğu Anadolu,Arçelik,A,90
+D126,Kılıç Dayanıklı Tüketim,Malatya,Doğu Anadolu,Beko,C,90
+D127,Korkmaz Elektrik,Erzurum,Doğu Anadolu,Arçelik,B,90
+D128,Bozkurt Elektrik,Elazığ,Doğu Anadolu,Arçelik,B,90
+D129,Ünal Elektrik,Gaziantep,Güneydoğu Anadolu,Beko,C,120
+D130,Sarı Ev Aletleri,Diyarbakır,Güneydoğu Anadolu,Beko,C,120
+D131,Uçar Ev Aletleri,Mardin,Güneydoğu Anadolu,Beko,B,90
+D132,Güler Elektronik,Mardin,Güneydoğu Anadolu,Beko,C,90
+D133,Doğan Beyaz Eşya,Gaziantep,Güneydoğu Anadolu,Beko,C,120
+D134,Ateş Elektronik,Mardin,Güneydoğu Anadolu,Arçelik,C,90
+D135,Ünal Beyaz Eşya,Diyarbakır,Güneydoğu Anadolu,Arçelik,B,90
+D136,Koç Beyaz Eşya,Mardin,Güneydoğu Anadolu,Beko,A,120
+D137,Aksoy Ev Aletleri,Mardin,Güneydoğu Anadolu,Beko,C,90
+D138,Özkan Dayanıklı Tüketim,Mardin,Güneydoğu Anadolu,Beko,B,90
+D139,Bulut Elektrik,Şanlıurfa,Güneydoğu Anadolu,Beko,C,120
+D140,Keskin Beyaz Eşya,Şanlıurfa,Güneydoğu Anadolu,Arçelik,C,90
